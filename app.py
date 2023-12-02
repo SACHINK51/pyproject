@@ -78,8 +78,10 @@ def login():
             session['user_id'] = user[0]
             session['username'] = user[1]
             session['user_type'] = user[2]
-
-            return 'Login successful!'
+            if session['user_type'] == "Supplier":
+                return render_template('supplier.html')
+            else:
+                return render_template('customer.html')
         else:
             return 'Invalid username or password'
 
