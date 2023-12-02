@@ -141,8 +141,8 @@ def hello(): # Name of the method
     Result['ProductDescription']=row[3]
     Result['ID']=row[4]
     Results.append(Result)
-    response={'Results':Results, 'count':len(Results)}
-    ret=app.response_class(
+  response={'Results':Results, 'count':len(Results)}
+  ret=app.response_class(
     response=json.dumps(response),
     status=200,
     mimetype='application/json'
