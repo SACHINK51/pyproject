@@ -33,6 +33,7 @@ dictConfig({
 
 
 app = Flask(__name__)
+app.secret_key = 'supply_chain_secret_key'
 CORS(app)
 bcrypt = Bcrypt(app)
 
