@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import render_template
 from flask import request
+from flask_bcrypt import Bcrypt
 import mysql.connector
 from flask_cors import CORS
 import json
@@ -33,6 +34,7 @@ dictConfig({
 
 app = Flask(__name__)
 CORS(app)
+bcrypt = Bcrypt(app)
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -42,7 +44,7 @@ def signup():
         password = request.form['password']
 
         # Hash the password before storing it
-        hashed_password = generate_password_hash(password, method='sha256')
+        hashed_password = bcrypt.generate_password_hash(password, method='sha256')
 
         # Insert user details into the database
         insert_query = '''
