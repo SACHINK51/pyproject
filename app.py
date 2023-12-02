@@ -44,7 +44,7 @@ def signup():
         password = request.form['password']
 
         # Hash the password before storing it
-        hashed_password = bcrypt.generate_password_hash(password, method='sha256')
+        hashed_password = bcrypt.generate_password_hash(password)
 
         # Insert user details into the database
         insert_query = '''
