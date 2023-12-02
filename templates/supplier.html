@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supplier Page</title>
+</head>
+<body>
+
+<h2>Supplier Page</h2>
+
+<!-- Form for product details -->
+<form action="/add" method="POST">
+    <label for="productID">Product ID:</label>
+    <input type="text" id="productID" name="productID" readonly><br>
+	
+    <label for="productName">Product Name:</label>
+    <input type="text" id="productName" name="productName" required><br>
+
+    <label for="price">Price:</label>
+    <input type="text" id="price" name="price" required><br>
+
+    <label for="rating">Rating:</label>
+    <input type="text" id="rating" name="rating"><br>
+
+    <label for="productDescription">Product Description:</label>
+    <input type="text" id="productDescription" name="productDescription"><br>
+
+    <button type="button" onclick="addProduct()">Add</button><br>
+    <button type="button" onclick="loadProduct()">Load</button><br>
+    <button type="button" onclick="updateProduct()">Update</button><br>
+    <button type="button" onclick="deleteProduct()">Delete</button><br>
+</form>
+
+<script>
+    function addProduct() {
+        // JavaScript logic for adding a product
+        alert('Added product');
+        // You can make an AJAX request to the server to add the product
+    }
+
+    function loadProduct() {
+        // JavaScript logic for loading product details
+        alert('Product loaded');
+        // You can make an AJAX request to the server to load product details
+    }
+
+    function updateProduct() {
+        // JavaScript logic for updating a product
+        alert('Updated product');
+        // You can make an AJAX request to the server to update the product
+    }
+
+    function deleteProduct() {
+        // JavaScript logic for deleting a product
+        alert('Deleted product');
+        // You can make an AJAX request to the server to delete the product
+    }
+</script>
+
+</body>
+</html>
