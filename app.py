@@ -107,8 +107,8 @@ def update():
         productID = request.form['ID']
         new_product_name = request.form['new_product_name']
         new_price = request.form['new_price']
-	new_rating = request.form['new_rating']
-	new_product_description = request.form['new_product_description']
+	    new_rating = request.form['new_rating']
+	    new_product_description = request.form['new_product_description']
 		
         cur = mysql.cursor()
         s = '''UPDATE Product SET productName = '{}', price = '{}', rating = '{}', productDescription = '{}' WHERE productID = {};'''.format(new_product_name, new_price, new_rating, new_product_description, productID)
