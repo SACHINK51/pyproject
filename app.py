@@ -53,7 +53,7 @@ def signup():
         '''
         cursor = mysql.cursor(); #create a connection to the SQL instance
         cursor.execute(insert_query, (username, user_type, hashed_password))
-        conn.commit()
+        mysql.commit()
 
         return 'Signup successful!'
 
@@ -100,7 +100,7 @@ def supplier():
         '''
         cursor = mysql.cursor(); #create a connection to the SQL instance
         cursor.execute(insert_query, (product_name, price, rating, product_description))
-        conn.commit()
+        mysql.commit()
 
         return 'Product added successfully!'
 
