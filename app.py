@@ -51,6 +51,7 @@ def signup():
             INSERT INTO User (Username, UserType, Password)
             VALUES (%s, %s, %s)
         '''
+        cursor = mysql.cursor(); #create a connection to the SQL instance
         cursor.execute(insert_query, (username, user_type, hashed_password))
         conn.commit()
 
@@ -67,6 +68,7 @@ def login():
 
         # Check if the user exists and the password is correct
         select_query = 'SELECT * FROM User WHERE Username = %s AND UserType = %s'
+        cursor = mysql.cursor(); #create a connection to the SQL instance
         cursor.execute(select_query, (username, user_type))
         user = cursor.fetchone()
 
@@ -96,6 +98,7 @@ def supplier():
             INSERT INTO Product (ProductName, Price, Rating, ProductDescription)
             VALUES (%s, %s, %s, %s)
         '''
+        cursor = mysql.cursor(); #create a connection to the SQL instance
         cursor.execute(insert_query, (product_name, price, rating, product_description))
         conn.commit()
 
@@ -111,7 +114,6 @@ def update():
         new_price = request.form['new_price']
         new_rating = request.form['new_rating']
         new_product_description = request.form['new_product_description']
-		
         cur = mysql.cursor()
         s = '''UPDATE Product SET productName = '{}', price = '{}', rating = '{}', productDescription = '{}' WHERE productID = {};'''.format(new_product_name, new_price, new_rating, new_product_description, productID)
         app.logger.info(s)
