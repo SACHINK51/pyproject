@@ -1,104 +1,145 @@
-from flask import Flask, render_template, url_for, redirect
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
-from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import InputRequired, Length, ValidationError
-from flask_bcrypt import Bcrypt
+from flask import Flask
+from flask import render_template
+from flask import request
+import mysql.connector
+from flask_cors import CORS
+import json
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from werkzeug.security import generate_password_hash, check_password_hash
+import mysql.connector
+
+mysql = mysql.connector.connect(user='web', password='webPass',
+  host='127.0.0.1',
+  database='student')
+
+from logging.config import dictConfig
+
+dictConfig({
+    'version': 1,
+    'formatters': {'default': {
+        'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
+    }},
+    'handlers': {'wsgi': {
+        'class': 'logging.StreamHandler',
+        'stream': 'ext://flask.logging.wsgi_errors_stream',
+        'formatter': 'default'
+    }},
+    'root': {
+        'level': 'INFO',
+        'handlers': ['wsgi']
+    }
+})
+
 
 app = Flask(__name__)
-db = SQLAlchemy(app)
-bcrypt = Bcrypt(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-app.config['SECRET_KEY'] = 'thisisasecretkey'
+CORS(app)
 
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        username = request.form['username']
+        user_type = request.form['userType']
+        password = request.form['password']
 
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = 'login'
+        # Hash the password before storing it
+        hashed_password = generate_password_hash(password, method='sha256')
 
+        # Insert user details into the database
+        insert_query = '''
+            INSERT INTO User (Username, UserType, Password)
+            VALUES (%s, %s, %s)
+        '''
+        cursor.execute(insert_query, (username, user_type, hashed_password))
+        conn.commit()
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
+        return 'Signup successful!'
 
-
-class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20), nullable=False, unique=True)
-    password = db.Column(db.String(80), nullable=False)
-
-
-class RegisterForm(FlaskForm):
-    username = StringField(validators=[
-                           InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Username"})
-
-    password = PasswordField(validators=[
-                             InputRequired(), Length(min=8, max=20)], render_kw={"placeholder": "Password"})
-
-    submit = SubmitField('Register')
-
-    def validate_username(self, username):
-        existing_user_username = User.query.filter_by(
-            username=username.data).first()
-        if existing_user_username:
-            raise ValidationError(
-                'That username already exists. Please choose a different one.')
-
-
-class LoginForm(FlaskForm):
-    username = StringField(validators=[
-                           InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Username"})
-
-    password = PasswordField(validators=[
-                             InputRequired(), Length(min=8, max=20)], render_kw={"placeholder": "Password"})
-
-    submit = SubmitField('Login')
-
-
-@app.route('/')
-def home():
-    return render_template('home.html')
-
-
+    return render_template('signup.html')
+	
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-        if user:
-            if bcrypt.check_password_hash(user.password, form.password.data):
-                login_user(user)
-                return redirect(url_for('dashboard'))
-    return render_template('login.html', form=form)
+    if request.method == 'POST':
+        username = request.form['username']
+        user_type = request.form['userType']
+        password = request.form['password']
 
+        # Check if the user exists and the password is correct
+        select_query = 'SELECT * FROM User WHERE Username = %s AND UserType = %s'
+        cursor.execute(select_query, (username, user_type))
+        user = cursor.fetchone()
 
-@app.route('/dashboard', methods=['GET', 'POST'])
-@login_required
-def dashboard():
-    return render_template('dashboard.html')
+        if user and check_password_hash(user[3], password):
+            # Set user information in the session
+            session['user_id'] = user[0]
+            session['username'] = user[1]
+            session['user_type'] = user[2]
 
+            return 'Login successful!'
+        else:
+            return 'Invalid username or password'
 
-@app.route('/logout', methods=['GET', 'POST'])
-@login_required
-def logout():
-    logout_user()
-    return redirect(url_for('login'))
+    return render_template('login.html')
+	
+@app.route('/add', methods=['GET', 'POST'])
+def supplier():
+    if request.method == 'POST':
+        # Get product details from the form
+        product_name = request.form['productName']
+        price = request.form['price']
+        rating = request.form['rating']
+        product_description = request.form['productDescription']
 
+        # Insert product into the Product table
+        insert_query = '''
+            INSERT INTO Product (ProductName, Price, Rating, ProductDescription)
+            VALUES (%s, %s, %s, %s)
+        '''
+        cursor.execute(insert_query, (product_name, price, rating, product_description))
+        conn.commit()
 
-@ app.route('/register', methods=['GET', 'POST'])
-def register():
-    form = RegisterForm()
+        return 'Product added successfully!'
 
-    if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data)
-        new_user = User(username=form.username.data, password=hashed_password)
-        db.session.add(new_user)
-        db.session.commit()
-        return redirect(url_for('login'))
+    return render_template('supplier.html')
+	
+@app.route("/update", methods=['GET', 'POST']) # Update Student
+def update():
+    if request.method == 'POST':
+        productID = request.form['ID']
+        new_product_name = request.form['new_product_name']
+        new_price = request.form['new_price']
+		new_rating = request.form['new_rating']
+		new_product_description = request.form['new_product_description']
+		
+        cur = mysql.cursor()
+        s = '''UPDATE Product SET productName = '{}', price = '{}', rating = '{}', productDescription = '{}' WHERE productID = {};'''.format(new_product_name, new_price, new_rating, new_product_description, productID)
+        app.logger.info(s)
+        cur.execute(s)
+        mysql.commit()
 
-    return render_template('register.html', form=form)
+        return '{"Result":"Success"}'
+    else:
+        return render_template('update.html')
 
-
+@app.route("/") #Default - Show Data
+def hello(): # Name of the method
+  cur = mysql.cursor() #create a connection to the SQL instance
+  cur.execute('''SELECT * FROM Product''') # execute an SQL statment
+  rv = cur.fetchall() #Retreive all rows returend by the SQL statment
+  Results=[]
+  for row in rv: #Format the Output Results and add to return string
+    Result={}
+    Result['ProductName']=row[0].replace('\n',' ')
+    Result['Price']=row[1]
+	Result['Rating']=row[2]
+	Result['ProductDescription']=row[3]
+    Result['ID']=row[4]
+    Results.append(Result)
+  response={'Results':Results, 'count':len(Results)}
+  ret=app.response_class(
+    response=json.dumps(response),
+    status=200,
+    mimetype='application/json'
+  )
+  return ret #Return the data in a string format
 if __name__ == "__main__":
-    app.run(debug=True)
+  app.run(host='0.0.0.0',port='8080', ssl_context=('cert.pem', 'privkey.pem')) #Run the flask app at port 8080
