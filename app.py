@@ -72,7 +72,7 @@ def login():
         cursor.execute(select_query, (username, user_type))
         user = cursor.fetchone()
 
-        if user and check_password_hash(user[3], password):
+        if user and bcrypt.check_password_hash(user[3], password):
             # Set user information in the session
             session['user_id'] = user[0]
             session['username'] = user[1]
