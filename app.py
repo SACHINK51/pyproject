@@ -87,6 +87,28 @@ def login():
 
     return render_template('login.html')
 	
+@app.route("/") #Default - Show Data
+def hello(): # Name of the method
+  cur = mysql.cursor() #create a connection to the SQL instance
+  cur.execute('''SELECT * FROM Product''') # execute an SQL statment
+  rv = cur.fetchall() #Retreive all rows returend by the SQL statment
+  Results=[]
+  for row in rv: #Format the Output Results and add to return string
+    Result={}
+    Result['ProductName']=row[0].replace('\n',' ')
+    Result['Price']=row[1]
+    Result['Rating']=row[2]
+    Result['ProductDescription']=row[3]
+    Result['ID']=row[4]
+    Results.append(Result)
+    response={'Results':Results, 'count':len(Results)}
+    ret=app.response_class(
+    response=json.dumps(response),
+    status=200,
+    mimetype='application/json'
+  )
+  return ret #Return the data in a string format
+
 @app.route('/add', methods=['GET', 'POST'])
 def supplier():
     if request.method == 'POST':
@@ -126,27 +148,32 @@ def update():
         return '{"Result":"Success"}'
     else:
         return render_template('update.html')
+    
+@app.route("/load/<int:product_id>")
+def load_product(product_id):
+    cur = mysql.connection.cursor()
+    cur.execute('''SELECT * FROM Product WHERE productID = %s''', (product_id,))
+    result = cur.fetchone()
 
-@app.route("/") #Default - Show Data
-def hello(): # Name of the method
-  cur = mysql.cursor() #create a connection to the SQL instance
-  cur.execute('''SELECT * FROM Product''') # execute an SQL statment
-  rv = cur.fetchall() #Retreive all rows returend by the SQL statment
-  Results=[]
-  for row in rv: #Format the Output Results and add to return string
-    Result={}
-    Result['ProductName']=row[0].replace('\n',' ')
-    Result['Price']=row[1]
-    Result['Rating']=row[2]
-    Result['ProductDescription']=row[3]
-    Result['ID']=row[4]
-    Results.append(Result)
-  response={'Results':Results, 'count':len(Results)}
-  ret=app.response_class(
-    response=json.dumps(response),
-    status=200,
-    mimetype='application/json'
-  )
-  return ret #Return the data in a string format
+    if result:
+        response = {
+            'ProductName': result[0],
+            'Price': result[1],
+            'Rating': result[2],
+            'ProductDescription': result[3],
+            'ID': result[4]
+        }
+        return jsonify(response), 200
+    else:
+        return "Product not found", 404
+    
+@app.route("/delete/<int:product_id>", methods=["DELETE"])
+def delete_product(product_id):
+    cur = mysql.connection.cursor()
+    cur.execute('''DELETE FROM Product WHERE productID = %s''', (product_id,))
+    mysql.connection.commit()
+
+    return "Product deleted successfully", 200
+
 if __name__ == "__main__":
   app.run(host='0.0.0.0',port='8080', ssl_context=('cert.pem', 'privkey.pem')) #Run the flask app at port 8080
