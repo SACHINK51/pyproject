@@ -128,8 +128,6 @@ def supplier():
         mysql.commit()
 
         return 'Product added successfully!'
-
-    return render_template('supplier.html')
 	
 @app.route("/update", methods=['GET', 'POST']) # Update Student
 def update():
