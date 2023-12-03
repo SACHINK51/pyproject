@@ -109,7 +109,7 @@ def hello(): # Name of the method
   )
   return ret #Return the data in a string format
 
-@app.route('/add', methods=['GET', 'POST'])
+@app.route('/supplier', methods=['GET', 'POST'])
 def supplier():
     if request.method == 'POST':
         # Get product details from the form
@@ -144,8 +144,6 @@ def update():
         mysql.commit()
 
         return '{"Result":"Success"}'
-    else:
-        return render_template('update.html')
     
 @app.route("/load/<int:product_id>")
 def load_product(product_id):
