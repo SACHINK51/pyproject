@@ -126,8 +126,7 @@ def supplier():
         cursor = mysql.cursor(); #create a connection to the SQL instance
         cursor.execute(insert_query, (product_name, price, rating, product_description))
         mysql.commit()
-        alert('Product added successfully')
-
+        
         return render_template('supplier.html')
 	
 @app.route("/update", methods=['GET', 'POST']) # Update Student
@@ -143,7 +142,6 @@ def update():
         app.logger.info(s)
         cur.execute(s)
         mysql.commit()
-        alert('Product updated successfully')
 
         return render_template('supplier.html')
     
@@ -170,7 +168,6 @@ def delete_product(product_id):
     cur = mysql.connection.cursor()
     cur.execute('''DELETE FROM Product WHERE productID = %s''', (product_id,))
     mysql.connection.commit()
-    alert('Product deleted')
     return render_template('supplier.html')
 
 if __name__ == "__main__":
