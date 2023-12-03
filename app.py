@@ -106,8 +106,8 @@ def hello(): # Name of the method
     response=json.dumps(response),
     status=200,
     mimetype='application/json'
-  )
-  return 'ret' #Return the data in a string format
+    )
+    return ret #Return the data in a string format
 
 @app.route('/supplier', methods=['GET', 'POST'])
 def supplier():
