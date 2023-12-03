@@ -126,8 +126,9 @@ def supplier():
         cursor = mysql.cursor(); #create a connection to the SQL instance
         cursor.execute(insert_query, (product_name, price, rating, product_description))
         mysql.commit()
+        alert('Product added successfully')
 
-        return 'Product added successfully!'
+        return render_template('supplier.html')
 	
 @app.route("/update", methods=['GET', 'POST']) # Update Student
 def update():
@@ -142,8 +143,9 @@ def update():
         app.logger.info(s)
         cur.execute(s)
         mysql.commit()
+        alert('Product updated successfully')
 
-        return '{"Result":"Success"}'
+        return render_template('supplier.html')
     
 @app.route("/load/<int:product_id>")
 def load_product(product_id):
@@ -168,8 +170,8 @@ def delete_product(product_id):
     cur = mysql.connection.cursor()
     cur.execute('''DELETE FROM Product WHERE productID = %s''', (product_id,))
     mysql.connection.commit()
-
-    return "Product deleted successfully", 200
+    alert('Product deleted')
+    return render_template('supplier.html')
 
 if __name__ == "__main__":
   app.run(host='0.0.0.0',port='8080', ssl_context=('cert.pem', 'privkey.pem')) #Run the flask app at port 8080
