@@ -49,7 +49,7 @@ def signup():
 
         # Insert user details into the database
         insert_query = '''
-            INSERT INTO User (Username, UserType, Password)
+            INSERT INTO User (UserName, UserType, Password)
             VALUES (%s, %s, %s)
         '''
         cursor = mysql.cursor(); #create a connection to the SQL instance
@@ -63,7 +63,7 @@ def signup():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username']
+        username = request.form['userName']
         user_type = request.form['userType']
         password = request.form['password']
 
