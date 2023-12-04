@@ -72,14 +72,14 @@
     </div>
     <div class="product-container">
         {% for product in products %}
-        <form class="formHead" id="updateForm{{product['productID']}}" action="/delete_product/{{product['productID']}}" method="PUT">
+        <form class="formHead" id="updateForm{{product['productID']}}" action="/update_product/{{product['productID']}}" method="PUT">
             <input type="text" id="addProductName" name="productName" placeholder="Product Name" value="{{ product['ProductName'] }}" required>
             <input type="number" id="addProductPrice" name="price" placeholder="Price" value="{{ product['Price'] }}" required>
             <input type="number" id="addProductRating" name="rating" placeholder="rating" value="{{ product['Rating'] }}" required>
             <input type="text" id="addProductDescription" name="productDescription" placeholder="Product Description" value="{{ product['ProductDescription'] }}" required>
             <button type="submit" name="submit">update</button>
         </form>
-        <form class="formHead" id="deleteForm{{product['productID']}}" action="/delete_product/{{product['productID']}}" method="PUT"><button type="submit" name="submit">delete</button></form>
+        <form class="formHead" id="deleteForm{{product['productID']}}" action="/delete_product/{{product['productID']}}" method="DELETE"><button type="submit" name="submit">delete</button></form>
         {% endfor %}
     </div>
 </body>

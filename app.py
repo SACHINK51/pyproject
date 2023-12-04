@@ -218,7 +218,7 @@ def add_product():
         return jsonify({'error': str(e)}), 500
 
 
-@app.route('/update_product/<int:product_id>', methods=['PUT'])
+@app.route('/update_product/<int:product_id>', methods=['GET','PUT'])
 def update_product(product_id):
     try:
         productName = request.form['productName']
