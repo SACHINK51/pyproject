@@ -73,11 +73,11 @@ def login():
         cursor.execute(select_query, (username, user_type))
         user = cursor.fetchone()
 
-        if user and bcrypt.check_password_hash(user[2], password):
+        if user and bcrypt.check_password_hash(user[3], password):
             # Set user information in the session
-            session['user_id'] = user[3]
-            session['username'] = user[0]
-            session['user_type'] = user[1]
+            session['user_id'] = user[0]
+            session['username'] = user[1]
+            session['user_type'] = user[2]
             if session['user_type'] == "Supplier":
                 return render_template('supplier.html')
             else:
