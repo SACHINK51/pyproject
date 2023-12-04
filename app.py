@@ -221,7 +221,7 @@ def add_product():
 @app.route('/update_product/<int:product_id>', methods=['GET','PUT'])
 def update_product(product_id):
     try:
-        if request.method == 'PUT':
+        if request.method == 'GET':
             productName = request.form['productName']
             price = request.form['price']
             rating = request.form['rating']
@@ -247,7 +247,7 @@ def update_product(product_id):
 @app.route('/delete_product/<int:product_id>', methods=['GET','DELETE'])
 def delete_product(product_id):
     try:
-        if request.method == 'DELETE':
+        if request.method == 'GET':
             delete_query = '''
                 DELETE FROM Product WHERE ProductID = %s
             '''
