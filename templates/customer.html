@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .product-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start; 
+            padding: 20px;
+        }
+
+        .product-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            padding: 15px;
+            width: 300px;
+            background-color: #fff;
+            text-align: center;
+        }
+
+        .product-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .product-price {
+            color: #007bff;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .product-description {
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+
+        .user-name {
+            font-size: 1em;
+            color: #333;
+            margin-top: 5px;
+        }
+
+        .logout-button {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .logout-button button {
+            background-color: #d9534f;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .search-bar {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .search-bar input {
+            padding: 8px;
+            margin-right: 10px;
+        }
+
+        .search-bar button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome, {{ session['username'] }}</h1>
+        <div class="logout-button">
+            <form action="{{ url_for('logout') }}" method="post">
+                <button type="submit">Logout</button>
+            </form>
+        </div>
+    </header>
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search...">
+        <button type="button" onclick="searchMethod()">Search</button>
+    </div>
+    <div class="product-container">
+        {% for product in products %}
+            <div class="product-card">
+                <div class="product-name">{{ product['ProductName'] }}</div>
+                <div class="product-price">${{ product['Price'] }}</div>
+                <div class="product-description">{{ product['ProductDescription'] }}</div>
+                <div class="user-name">Supplier: {{ product['userName'] }}</div>
+            </div>
+        {% endfor %}
+    </div>
+    <script>
+        function searchMethod() {
+            const searchTerm = document.getElementById('searchInput').value;
+            
+            // Make a request to the Python API for searching
+            fetch(`/search_product?term=${searchTerm}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    window.location.href = `/search_results?term=${searchTerm}`;
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -3,63 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supplier Page</title>
+    <title>Supplier Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .add-product-form, .product-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .add-product-form input, .product-container input {
+            padding: 8px;
+            margin-right: 10px;
+        }
+
+        .add-product-form button, .product-container button {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .logout-button {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .logout-button button {
+            background-color: #d9534f;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <h1>Welcome, {{ session['userName'] }}</h1>
+        <div class="logout-button">
+            <form action="{{ url_for('logout') }}" method="post">
+                <button type="submit">Logout</button>
+            </form>
+        </div>
+    </header>
+    <div class="add-product-form" >
+        <form class="formHead" id="addProductForm" action="/add_product" method="POST">
+            <input type="text" id="addProductName" name="productName" placeholder="Product Name" required>
+            <input type="number" id="addProductPrice" name="price" placeholder="Price" required>
+            <input type="number" id="addProductRating" name="rating" placeholder="rating" required>
+            <input type="text" id="addProductDescription" name="productDescription" placeholder="Product Description" required>
+            <button type="submit" name="submit">Add Product</button>
+        </form>
+    </div>
+    <div class="product-container">
+        {% for product in products %}
+        <form class="formHead" id="updateForm{{product['productID']}}">
+            <input type="text" id="productName{{product['productID']}}" name="productName" placeholder="Product Name" value="{{ product['ProductName'] }}" required>
+            <input type="number" id="productPrice{{product['productID']}}" name="price" placeholder="Price" value="{{ product['Price'] }}" required>
+            <input type="number" id="productRating{{product['productID']}}" name="rating" placeholder="rating" value="{{ product['Rating'] }}" required>
+            <input type="text" id="productDescription{{product['productID']}}" name="productDescription" placeholder="Product Description" value="{{ product['ProductDescription'] }}" required>
+            <button type="button" name="submit" onclick="updateMethod('{{ product.productID }}')">update</button>
+            <button type="button" name="submit" onclick="deleteMethod('{{ product.productID }}')">delete</button>
+        </form>
+        {% endfor %}
+    </div>
+    <script>
+        function updateMethod(productID){
+            const updatedProductName = document.getElementById(`productName${productID}`).value;
+            const updatedProductPrice = document.getElementById(`productPrice${productID}`).value;
+            const updatedProductRating = document.getElementById(`productRating${productID}`).value;
+            const updatedProductDescription = document.getElementById(`productDescription${productID}`).value;
 
-<h2>Supplier Page</h2>
+            // Make a request to the Python API for updating the product
+            fetch(`/update_product/${productID}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    new_product_name: updatedProductName,
+                    new_price: updatedProductPrice,
+                    new_rating: updatedProductRating,
+                    new_product_description: updatedProductDescription,
+                }),
+            })
+            .then(response => {
+                if(response.status==200){
+                window.location.reload()
+               }
+            });
+            alert("Product has been updated")
+        }
+        function deleteMethod(productID){
+            fetch(`/delete_product/${productID}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => {
+               if(response.status==200){
+                window.location.reload()
+               }
+            });
 
-<!-- Form for product details -->
-<form action="/supplier" method="POST">
-    <label for="productID">Product ID:</label>
-    <input type="text" id="productID" name="productID"><br>
-	
-    <label for="productName">Product Name:</label>
-    <input type="text" id="productName" name="productName" required><br>
-
-    <label for="price">Price:</label>
-    <input type="text" id="price" name="price" required><br>
-
-    <label for="rating">Rating:</label>
-    <input type="text" id="rating" name="rating"><br>
-
-    <label for="productDescription">Product Description:</label>
-    <input type="text" id="productDescription" name="productDescription"><br>
-	
-    <label for="userId">User:</label>
-    <input type="text" id="userId" name="userId" readonly><br>
-	
-    <button type="submit" name="submit1">Add</button><br>
-    <button type="submit" name="submit2">Load</button><br>
-    <button type="submit" name="submit3">Update</button><br>
-    <button type="submit" name="submit4">Delete</button><br>
-</form>
-
-<script>
-    function addProduct() {
-        // JavaScript logic for adding a product
-        alert('Added product');
-        // You can make an AJAX request to the server to add the product
-    }
-
-    function loadProduct() {
-        // JavaScript logic for loading product details
-        alert('Product loaded');
-        // You can make an AJAX request to the server to load product details
-    }
-
-    function updateProduct() {
-        // JavaScript logic for updating a product
-        alert('Updated product');
-        // You can make an AJAX request to the server to update the product
-    }
-
-    function deleteProduct() {
-        // JavaScript logic for deleting a product
-        alert('Deleted product');
-        // You can make an AJAX request to the server to delete the product
-    }
-</script>
-
+        }        
+    </script>
 </body>
 </html>
