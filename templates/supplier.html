@@ -3,63 +3,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supplier Page</title>
+    <title>Supplier Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .product-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 20px;
+        }
+
+        .product-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            padding: 15px;
+            width: 300px;
+            background-color: #fff;
+            text-align: center;
+        }
+
+        .product-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .product-price {
+            color: #007bff;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .product-description {
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+
+        .edit-delete-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .edit-delete-buttons button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .add-product-form {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .add-product-form input {
+            padding: 8px;
+            margin-right: 10px;
+        }
+
+        .add-product-form button {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <h1>Welcome, {{ session['userName'] }}</h1>
+        <div class="logout-button">
+            <form action="{{ url_for('logout') }}" method="post">
+                <button type="submit">Logout</button>
+            </form>
+        </div>
+    </header>
 
-<h2>Supplier Page</h2>
+    <div class="product-container">
+        {% for product in products %}
+            <div class="product-card" id={{ product['ProductName'] }}>
+                <div class="product-name">{{ product['ProductName'] }}</div>
+                <div class="product-price">${{ product['Price'] }}</div>
+                <div class="product-description">{{ product['ProductDescription'] }}</div>
+                <div class="edit-delete-buttons">
+                    <button onclick="toggleEditForm(product['ID'])">Edit</button>
+                    <button onclick="deleteProduct(product['ID'])">Delete</button>
+                </div>
+            </div>
+            <form id="editForm{{ product['ID'] }}" style="display: none;">
+                <label for="productName">Product Name:</label>
+                <input type="text" id="productName{{ product['ID'] }}" value="{{ product['ProductName'] }}">
+                
+                <label for="productPrice">Product Price:</label>
+                <input type="text" id="productPrice{{ product['ID'] }}" value="{{ product['Price'] }}">
+                
+                <label for="productDescription">Product Description:</label>
+                <textarea id="productDescription{{ product['ID'] }}">{{ product['ProductDescription'] }}</textarea>
+                
+                <button onclick="submitEdit(product['ID'])">Submit</button>
+            </form>
+        {% endfor %}
+    </div>
 
-<!-- Form for product details -->
-<form action="/supplier" method="POST">
-    <label for="productID">Product ID:</label>
-    <input type="text" id="productID" name="productID"><br>
-	
-    <label for="productName">Product Name:</label>
-    <input type="text" id="productName" name="productName" required><br>
+    <div class="add-product-form">
+        <form id="addProductForm">
+            <input type="text" name="productName" placeholder="Product Name" required>
+            <input type="number" name="price" placeholder="Price" required>
+            <input type="text" name="productDescription" placeholder="Product Description" required>
+            <button type="button" onclick="addProduct()">Add Product</button>
+        </form>
+    </div>
 
-    <label for="price">Price:</label>
-    <input type="text" id="price" name="price" required><br>
 
-    <label for="rating">Rating:</label>
-    <input type="text" id="rating" name="rating"><br>
+    <script>
+        function toggleEditForm(productID) {
+            const editForm = document.getElementById(`editForm${productID}`);
+            if (editForm.style.display === 'none') {
+                editForm.style.display = 'block';
+            } else {
+                editForm.style.display = 'none';
+            }
+        }
+        function editProduct(productID) {
+            // Implement edit product functionality
+            console.log('Edit product:', productID);
+        }
 
-    <label for="productDescription">Product Description:</label>
-    <input type="text" id="productDescription" name="productDescription"><br>
-	
-    <label for="userId">User:</label>
-    <input type="text" id="userId" name="userId" readonly><br>
-	
-    <button type="submit" name="submit1">Add</button><br>
-    <button type="submit" name="submit2">Load</button><br>
-    <button type="submit" name="submit3">Update</button><br>
-    <button type="submit" name="submit4">Delete</button><br>
-</form>
+        function deleteProduct(productID) {
+            // Call the Python API to delete the product
+            fetch(`/delete/${productID}`, {
+                method: 'DELETE',
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Handle success, you can update the UI or perform other actions
+                console.log('Product deleted:', data);
+            })
+            .catch(error => {
+                console.error('Error deleting product:', error);
+            });
+        }
+        function submitEdit(productID) {
+            const productName = document.getElementById(`productName${productID}`).value;
+            const productPrice = document.getElementById(`productPrice${productID}`).value;
+            const productDescription = document.getElementById(`productDescription${productID}`).value;
 
-<script>
-    function addProduct() {
-        // JavaScript logic for adding a product
-        alert('Added product');
-        // You can make an AJAX request to the server to add the product
-    }
+            // Call the Python API to update the product
+            fetch(`/update`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    productID: productID,
+                    new_product_name: productName,
+                    new_price: productPrice,
+                    new_product_description: productDescription,
+                }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Handle success, you can update the UI or perform other actions
+                console.log('Product updated:', data);
+                
+                // Optionally, hide the edit form after submitting
+                toggleEditForm(productID);
+            })
+            .catch(error => {
+                console.error('Error updating product:', error);
+            });
+        }
+        function addProduct() {
+            // Get values from the form
+            const productName = document.getElementById('productName').value;
+            const price = document.getElementById('price').value;
+            const productDescription = document.getElementById('productDescription').value;
 
-    function loadProduct() {
-        // JavaScript logic for loading product details
-        alert('Product loaded');
-        // You can make an AJAX request to the server to load product details
-    }
-
-    function updateProduct() {
-        // JavaScript logic for updating a product
-        alert('Updated product');
-        // You can make an AJAX request to the server to update the product
-    }
-
-    function deleteProduct() {
-        // JavaScript logic for deleting a product
-        alert('Deleted product');
-        // You can make an AJAX request to the server to delete the product
-    }
-</script>
-
+            // Call the Python API to add the product
+            fetch('/add_product', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    productName,
+                    price,
+                    productDescription,
+                }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Handle success, you can update the UI or perform other actions
+                console.log('Product added:', data);
+            })
+            .catch(error => {
+                console.error('Error adding product:', error);
+            });
+        }
+    </script>
 </body>
 </html>

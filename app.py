@@ -108,7 +108,7 @@ def login():
             login_user(User(user[0], user[1], user[2]))
 
             if session['userType'] == "Supplier":
-                return render_template('supplier.html')
+                return redirect(url_for('supplier_dashboard'));
             else:
                 return redirect(url_for('customer_dashboard'));
         else:
@@ -138,6 +138,30 @@ def customer_dashboard():
         return render_template('customer.html', products=products)
     else:
         return 'Access denied. You are not a customer.'
+    
+@app.route("/supplier_dashboard")
+@login_required
+def customer_dashboard():
+    if current_user.is_authenticated and current_user.userType == "Supplier":
+        cur = mysql.cursor()
+        cur.execute('''SELECT * FROM Product WHERE userID = %s''', (userID,))
+        results  = cur.fetchall()
+        products = []
+        for row in results :
+            product = {
+                'productID': row[0],
+                'ProductName': row[1],
+                'Price': row[2],
+                'Rating': row[3],
+                'ProductDescription': row[4],
+                'userID': row[5]
+            }
+            products.append(product)
+        print('products', products)
+        return render_template('supplier.html', products=products)
+    else:
+        return 'Access denied. You are not a customer.'
+
 
 @app.route('/logout', methods=['POST'])
 def logout():
@@ -190,46 +214,66 @@ def supplier():
         
         return render_template('supplier.html')
 	
-@app.route("/update", methods=['GET', 'POST']) # Update Student
-def update():
-    if request.method == 'POST':
-        productID = request.form['ID']
-        new_product_name = request.form['new_product_name']
-        new_price = request.form['new_price']
-        new_rating = request.form['new_rating']
-        new_product_description = request.form['new_product_description']
-        cur = mysql.cursor()
-        s = '''UPDATE Product SET productName = '{}', price = '{}', rating = '{}', productDescription = '{}' WHERE productID = {};'''.format(new_product_name, new_price, new_rating, new_product_description, productID)
-        app.logger.info(s)
-        cur.execute(s)
+
+@app.route('/add_product', methods=['POST'])
+def add_product():
+    try:
+        data = request.get_json()
+        product_name = data.get('productName')
+        price = data.get('price')
+        product_description = data.get('productDescription')
+
+        # Insert product into the Product table
+        insert_query = '''
+            INSERT INTO Product (ProductName, Price, ProductDescription)
+            VALUES (%s, %s, %s)
+        '''
+        cursor = mysql.cursor()
+        cursor.execute(insert_query, (product_name, price, product_description))
         mysql.commit()
 
-        return render_template('supplier.html')
-    
-@app.route("/load/<int:product_id>")
-def load_product(product_id):
-    cur = mysql.connection.cursor()
-    cur.execute('''SELECT * FROM Product WHERE productID = %s''', (product_id,))
-    result = cur.fetchone()
+        return jsonify({'message': 'Product added successfully'}), 201
 
-    if result:
-        response = {
-            'ProductName': result[0],
-            'Price': result[1],
-            'Rating': result[2],
-            'ProductDescription': result[3],
-            'ID': result[4]
-        }
-        return jsonify(response), 200
-    else:
-        return "Product not found", 404
-    
-@app.route("/delete/<int:product_id>", methods=["DELETE"])
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/update_product/<int:product_id>', methods=['PUT'])
+def update_product(product_id):
+    try:
+        data = request.get_json()
+        new_product_name = data.get('newProductName')
+        new_price = data.get('newPrice')
+        new_product_description = data.get('newProductDescription')
+
+        # Update product in the Product table
+        update_query = '''
+            UPDATE Product
+            SET ProductName = %s, Price = %s, ProductDescription = %s
+            WHERE ProductID = %s
+        '''
+        cursor = mysql.cursor()
+        cursor.execute(update_query, (new_product_name, new_price, new_product_description, product_id))
+        mysql.commit()
+
+        return jsonify({'message': 'Product updated successfully'}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/delete_product/<int:product_id>', methods=['DELETE'])
 def delete_product(product_id):
-    cur = mysql.connection.cursor()
-    cur.execute('''DELETE FROM Product WHERE productID = %s''', (product_id,))
-    mysql.connection.commit()
-    return render_template('supplier.html')
+    try:
+        # Delete product from the Product table
+        delete_query = '''
+            DELETE FROM Product WHERE ProductID = %s
+        '''
+        cursor = mysql.cursor()
+        cursor.execute(delete_query, (product_id,))
+        mysql.commit()
 
+        return jsonify({'message': 'Product deleted successfully'}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 if __name__ == "__main__":
   app.run(host='0.0.0.0',port='8080', ssl_context=('cert.pem', 'privkey.pem')) #Run the flask app at port 8080
