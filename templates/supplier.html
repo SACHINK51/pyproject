@@ -73,10 +73,10 @@
     <div class="product-container">
         {% for product in products %}
         <form class="formHead" id="updateForm{{product['productID']}}">
-            <input type="text" id="ProductName{{product['productID']}}" name="productName" placeholder="Product Name" value="{{ product['ProductName'] }}" required>
-            <input type="number" id="ProductPrice{{product['productID']}}" name="price" placeholder="Price" value="{{ product['Price'] }}" required>
-            <input type="number" id="ProductRating{{product['productID']}}" name="rating" placeholder="rating" value="{{ product['Rating'] }}" required>
-            <input type="text" id="ProductDescription{{product['productID']}}" name="productDescription" placeholder="Product Description" value="{{ product['ProductDescription'] }}" required>
+            <input type="text" id="productName{{product['productID']}}" name="productName" placeholder="Product Name" value="{{ product['ProductName'] }}" required>
+            <input type="number" id="productPrice{{product['productID']}}" name="price" placeholder="Price" value="{{ product['Price'] }}" required>
+            <input type="number" id="productRating{{product['productID']}}" name="rating" placeholder="rating" value="{{ product['Rating'] }}" required>
+            <input type="text" id="productDescription{{product['productID']}}" name="productDescription" placeholder="Product Description" value="{{ product['ProductDescription'] }}" required>
             <button type="button" name="submit" onclick="updateMethod('{{ product.productID }}')">update</button>
             <button type="button" name="submit" onclick="deleteMethod('{{ product.productID }}')">delete</button>
         </form>
@@ -86,7 +86,7 @@
         function updateMethod(productID){
             const updatedProductName = document.getElementById(`productName${productID}`).value;
             const updatedProductPrice = document.getElementById(`productPrice${productID}`).value;
-            const updatedProductRating = document.getElementById(`productPrice${productID}`).value;
+            const updatedProductRating = document.getElementById(`productRating${productID}`).value;
             const updatedProductDescription = document.getElementById(`productDescription${productID}`).value;
 
             // Make a request to the Python API for updating the product
