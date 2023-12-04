@@ -133,8 +133,8 @@
                     <div class="product-rating">Rating: {{ product['Rating'] }}</div>
                     <div class="product-description">{{ product['ProductDescription'] }}</div>
                     <div class="edit-delete-buttons">
-                    <button onclick=toggleEditForm(product.productID)>Edit</button>
-                    <button onclick="deleteProduct(product.productID)">Delete</button>
+                    <button onclick={toggleEditForm(product.productID)}>Edit</button>
+                    <button onclick={deleteProduct(product.productID)}>Delete</button>
                 </div>
                 </div>
                 <form id="editForm{{ product['ID'] }}" style="display: none;">
