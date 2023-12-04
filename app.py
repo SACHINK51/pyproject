@@ -68,7 +68,7 @@ def login():
         password = request.form['password']
 
         # Check if the user exists and the password is correct
-        select_query = 'SELECT * FROM User WHERE Username = %s AND UserType = %s'
+        select_query = 'SELECT * FROM User WHERE userName = %s AND userType = %s'
         cursor = mysql.cursor(); #create a connection to the SQL instance
         cursor.execute(select_query, (username, user_type))
         user = cursor.fetchone()
