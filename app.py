@@ -196,44 +196,49 @@ def hello(): # Name of the method
 
 @app.route('/add_product', methods=['GET','POST'])
 def add_product():
-    if request.method == 'POST':
-        productName = request.form['productName']
-        price = request.form['price']
-        rating = request.form['rating']
-        productDescription = request.form['productDescription']
-        userID = session.get('userID')
-        
-        # Insert product into the Product table
-        insert_query = '''
-            INSERT INTO Product (productName, price, rating, productDescription, userID)
-            VALUES (%s, %s, %s, %s, %s)
-        '''
-        cursor = mysql.cursor()
-        cursor.execute(insert_query, (productName, price, rating, productDescription, userID))
-        mysql.commit()
+    try:
+        if request.method == 'POST':
+            productName = request.form['productName']
+            price = request.form['price']
+            rating = request.form['rating']
+            productDescription = request.form['productDescription']
+            userID = session.get('userID')
+            
+            # Insert product into the Product table
+            insert_query = '''
+                INSERT INTO Product (productName, price, rating, productDescription, userID)
+                VALUES (%s, %s, %s, %s, %s)
+            '''
+            cursor = mysql.cursor()
+            cursor.execute(insert_query, (productName, price, rating, productDescription, userID))
+            mysql.commit()
 
-    return redirect(url_for('supplier_dashboard'))
+        return redirect(url_for('supplier_dashboard'))
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 @app.route('/update_product/<int:product_id>', methods=['PUT'])
 def update_product(product_id):
     try:
-        data = request.get_json()
-        new_product_name = data.get('newProductName')
-        new_price = data.get('newPrice')
-        new_product_description = data.get('newProductDescription')
+        productName = request.form['productName']
+        price = request.form['price']
+        rating = request.form['rating']
+        productDescription = request.form['productDescription']
+        userID = session.get('userID')
+        productID = product_id
 
         # Update product in the Product table
         update_query = '''
             UPDATE Product
-            SET ProductName = %s, Price = %s, ProductDescription = %s
-            WHERE ProductID = %s
+            SET productName = %s, price = %s, rating = %s productDescription = %s, userID = %s
+            WHERE productID = %s
         '''
         cursor = mysql.cursor()
-        cursor.execute(update_query, (new_product_name, new_price, new_product_description, product_id))
+        cursor.execute(update_query, (productName, price, rating, productDescription, userID, productID))
         mysql.commit()
 
-        return jsonify({'message': 'Product updated successfully'}), 200
+        return redirect(url_for('supplier_dashboard'))
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
