@@ -48,7 +48,7 @@ def load_user(userID):
     print(userID)
     user = query_user_by_id(userID)
     if user:
-        return User(user['userID'], user['userName'], user['userType'])
+        return user
     else:
         return None
 
