@@ -43,14 +43,14 @@ class User(UserMixin):
         self.username = username
         self.user_type = user_type
 
-@login_manager.user_loader
-def load_user(user_id):
-    user = query_user_by_id(user_id)
+# @login_manager.user_loader
+# def load_user(user_id):
+#     user = query_user_by_id(user_id)
 
-    if user:
-        return User(user['user_id'], user['username'], user['user_type'])
-    else:
-        return None
+#     if user:
+#         return User(user['user_id'], user['username'], user['user_type'])
+#     else:
+#         return None
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
