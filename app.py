@@ -194,15 +194,14 @@ def hello(): # Name of the method
     )
     return ret #Return the data in a string format
 
-@app.route('/add_product', methods=['POST'])
-@login_required
+@app.route('/add_product', methods=['GET','POST'])
 def add_product():
     if request.method == 'POST':
-        ProductName = request.form('productName')
-        price = request.form('price')
-        rating = request.form('rating')
-        ProductDescription = request.form('productDescription')
-        userID = request.form('userID')
+        ProductName = request.form['productName']
+        price = request.form['price']
+        rating = request.form['rating']
+        ProductDescription = request.form['productDescription']
+        userID = request.form['userID']
         
         # Insert product into the Product table
         insert_query = '''
@@ -213,7 +212,8 @@ def add_product():
         cursor.execute(insert_query, (ProductName, price, ProductDescription))
         mysql.commit()
 
-    return '{"Result":"Success"}'
+    return redirect(url_for('supplier_dashboard'))
+
 
 @app.route('/update_product/<int:product_id>', methods=['PUT'])
 def update_product(product_id):
