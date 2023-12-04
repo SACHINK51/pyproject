@@ -94,7 +94,7 @@ def login():
             session['username'] = user[1]
             session['user_type'] = user[2]
 
-            login_user(User(user['user_id'], user['username'], user['user_type']))
+            login_user(User(user[0], user[1], user[2]))
 
             if session['user_type'] == "Supplier":
                 return render_template('supplier.html')
