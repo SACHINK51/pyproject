@@ -226,7 +226,7 @@
             const price = document.getElementById('addProductPrice').value;
             const rating = document.getElementById('addProductRating').value;
             const productDescription = document.getElementById('addProductDescription').value;
-            print('Session:',session['userName']);
+            print('Session:',"{{session['userName']}}");
             const userID = session['userID'];
 
             // Call the Python API to add the product
