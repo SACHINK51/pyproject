@@ -39,7 +39,7 @@ login_manager.login_view = 'login'
 
 class User(UserMixin):
     def __init__(self, userID, userName, userType):
-        self.userID = userID
+        self.id = userID
         self.userName = userName
         self.userType = userType
 
