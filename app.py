@@ -1,11 +1,9 @@
-from flask import Flask
-from flask import render_template
-from flask import request
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_bcrypt import Bcrypt
+from flask_login import LoginManager, login_required, UserMixin
 import mysql.connector
 from flask_cors import CORS
 import json
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 import mysql.connector
 
@@ -36,6 +34,23 @@ app = Flask(__name__)
 app.secret_key = 'supply_chain_secret_key'
 CORS(app)
 bcrypt = Bcrypt(app)
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
+
+class User(UserMixin):
+    def __init__(self, user_id, username, user_type):
+        self.id = user_id
+        self.username = username
+        self.user_type = user_type
+
+@login_manager.user_loader
+def load_user(user_id):
+    user = query_user_by_id(user_id)
+
+    if user:
+        return User(user['user_id'], user['username'], user['user_type'])
+    else:
+        return None
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -78,6 +93,9 @@ def login():
             session['user_id'] = user[0]
             session['username'] = user[1]
             session['user_type'] = user[2]
+
+            login_user(User(user['user_id'], user['username'], user['user_type']))
+
             if session['user_type'] == "Supplier":
                 return render_template('supplier.html')
             else:
@@ -88,23 +106,36 @@ def login():
     return render_template('login.html')
 
 @app.route("/customer_dashboard")
+@login_required
 def customer_dashboard():
-    cur = mysql.cursor()
-    cur.execute('''SELECT * FROM Product''')
-    rv = cur.fetchall()
-    products = []
+    if current_user.is_authenticated and current_user.user_type == "Customer":
+        cur = mysql.cursor()
+        cur.execute('''SELECT * FROM Product''')
+        rv = cur.fetchall()
+        products = []
 
-    for row in rv:
-        product = {
-            'ProductName': row[0].replace('\n', ' '),
-            'Price': row[1],
-            'Rating': row[2],
-            'ProductDescription': row[3],
-            'ID': row[4]
-        }
-        products.append(product)
+        for row in rv:
+            product = {
+                'ProductName': row[0].replace('\n', ' '),
+                'Price': row[1],
+                'Rating': row[2],
+                'ProductDescription': row[3],
+                'ID': row[4]
+            }
+            products.append(product)
 
-    return render_template('customer.html', products=products)
+        return render_template('customer.html', products=products)
+    else:
+        return 'Access denied. You are not a customer.'
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    # Clear session data
+    session.pop('user_id', None)
+    session.pop('username', None)
+    session.pop('user_type', None)
+    return redirect(url_for('login'))
 
 @app.route("/") #Default - Show Data
 def hello(): # Name of the method
