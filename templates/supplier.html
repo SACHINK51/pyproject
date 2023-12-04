@@ -19,71 +19,17 @@
             text-align: center;
         }
 
-        .product-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: flex-start; /* Changed from space-around */
-            padding: 20px;
-        }
-
-        .product-card {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin: 10px;
-            padding: 15px;
-            width: 300px;
-            background-color: #fff;
-            text-align: center;
-        }
-
-        .product-name {
-            font-size: 1.2em;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .product-price {
-            color: #007bff;
-            font-size: 1.1em;
-            margin-bottom: 10px;
-        }
-
-        .product-rating{
-            font-size: 1em;
-            margin-bottom: 10px;
-        }
-        .product-description {
-            font-size: 1em;
-            margin-bottom: 10px;
-        }
-
-        .edit-delete-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-        }
-
-        .edit-delete-buttons button {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .add-product-form {
+        .add-product-form, .formHead {
             margin-top: 20px;
             text-align: center;
         }
 
-        .add-product-form input {
+        .add-product-form input, .formHead input {
             padding: 8px;
             margin-right: 10px;
         }
 
-        .add-product-form button {
+        .add-product-form button, .formHead button {
             background-color: #28a745;
             color: #fff;
             border: none;
@@ -116,7 +62,7 @@
         </div>
     </header>
     <div class="add-product-form" >
-        <form id="addProductForm" action="/add_product" method="POST">
+        <form class="formHead" id="addProductForm" action="/add_product" method="POST">
             <input type="text" id="addProductName" name="productName" placeholder="Product Name" required>
             <input type="number" id="addProductPrice" name="price" placeholder="Price" required>
             <input type="number" id="addProductRating" name="rating" placeholder="rating" required>
@@ -126,14 +72,14 @@
     </div>
     <div class="product-container">
         {% for product in products %}
-        <form id="addProductForm" action=`/update_product/${{product['productID']}}` method="PUT">
+        <form class="formHead" id="updateForm{{product['productID']}}" action="/delete_product/{{product['productID']}}" method="PUT">
             <input type="text" id="addProductName" name="productName" placeholder="Product Name" value="{{ product['ProductName'] }}" required>
             <input type="number" id="addProductPrice" name="price" placeholder="Price" value="{{ product['Price'] }}" required>
             <input type="number" id="addProductRating" name="rating" placeholder="rating" value="{{ product['Rating'] }}" required>
             <input type="text" id="addProductDescription" name="productDescription" placeholder="Product Description" value="{{ product['ProductDescription'] }}" required>
             <button type="submit" name="submit">update</button>
         </form>
-        <form id="addProductForm" action="/delete_product/{{product['productID']}}" method="PUT"><button type="submit" name="submit">delete</button></form>
+        <form class="formHead" id="deleteForm{{product['productID']}}" action="/delete_product/{{product['productID']}}" method="PUT"><button type="submit" name="submit">delete</button></form>
         {% endfor %}
     </div>
 </body>
