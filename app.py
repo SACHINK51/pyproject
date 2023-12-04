@@ -102,7 +102,7 @@ def login():
 
         if user and bcrypt.check_password_hash(user[3], password):
             # Set user information in the session
-            session['user_id'] = user[0]
+            session['userID'] = user[0]
             session['userName'] = user[1]
             session['userType'] = user[2]
 
@@ -140,11 +140,11 @@ def customer_dashboard():
     else:
         return 'Access denied. You are not a customer.'
 
-@app.route('/logout')
+@app.route('/logout', methods=['POST'])
 def logout():
     logout_user()
     # Clear session data
-    session.pop('user_id', None)
+    session.pop('userID', None)
     session.pop('userName', None)
     session.pop('userType', None)
     return redirect(url_for('login'))
