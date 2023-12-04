@@ -126,7 +126,7 @@
                 <div class="product-view">
                     <div class="product-name">{{ product['ProductName'] }}</div>
                     <div class="product-price">${{ product['Price'] }}</div>
-                    <div class="product-rating">${{ product['Rating'] }}</div>
+                    <div class="product-rating">Rating: {{ product['Rating'] }}</div>
                     <div class="product-description">{{ product['ProductDescription'] }}</div>
                     <div class="edit-delete-buttons">
                     <button onclick=toggleEditForm(product[ID])>Edit</button>
