@@ -76,7 +76,7 @@ def login():
         print("password:", password)
         print("User Type:", user_type)
         print("User:", user)
-        if user and bcrypt.check_password_hashbytes(bytes(user[3], 'utf-8'), password):
+        if user and bcrypt.check_password_hash(user[3], password):
             # Set user information in the session
             session['user_id'] = user[0]
             session['username'] = user[1]
