@@ -111,36 +111,6 @@
             </form>
         </div>
     </header>
-
-    <div class="product-container">
-        {% for product in products %}
-            <div class="product-card" id={{ product['ProductName'] }}>
-                <div class="product-name">{{ product['ProductName'] }}</div>
-                <div class="product-price">${{ product['Price'] }}</div>
-                <div class="product-description">{{ product['ProductDescription'] }}</div>
-                <div class="edit-delete-buttons">
-                    <button onclick="toggleEditForm(`{{ product['ID'] }}`)">Edit</button>
-                    <button onclick="deleteProduct(`{{ product['ID'] }}`)">Delete</button>
-                </div>
-            </div>
-            <form id="editForm{{ product['ID'] }}" style="display: none;">
-                <label for="productName">Product Name:</label>
-                <input type="text" id="productName{{ product['ID'] }}" value="{{ product['ProductName'] }}">
-                
-                <label for="productPrice">Product Price:</label>
-                <input type="text" id="productPrice{{ product['ID'] }}" value="{{ product['Price'] }}">
-                
-                <label for="productRating">Product Price:</label>
-                <input type="text" id="productRating{{ product['ID'] }}" value="{{ product['rating'] }}">
-                
-                <label for="productDescription">Product Description:</label>
-                <textarea id="productDescription{{ product['ID'] }}" value="{{ product['ProductDescription'] }}">{{ product['ProductDescription'] }}</textarea>
-                
-                <button onclick="submitEdit(product['ID'])">Submit</button>
-            </form>
-        {% endfor %}
-    </div>
-
     <div class="add-product-form" >
         <form id="addProductForm" action="/add_product" method="POST">
             <input type="text" id="addProductName" name="productName" placeholder="Product Name" required>
@@ -150,6 +120,37 @@
             <input type="number" id="addUserID" name="userID" placeholder="Product Description" value="{{session['userID']}}" required>
             <button type="submit" name="submit">Add Product</button>
         </form>
+    </div>
+    <div class="product-container">
+        {% for product in products %}
+            <div class="product-card" id={{ product['ProductName'] }}>
+                <div class="product-view">
+                    <div class="product-name">{{ product['ProductName'] }}</div>
+                    <div class="product-price">${{ product['Price'] }}</div>
+                    <div class="product-description">{{ product['ProductDescription'] }}</div>
+                    <div class="edit-delete-buttons">
+                    <button onclick="toggleEditForm(`{{ product['ID'] }}`)">Edit</button>
+                    <button onclick="deleteProduct(`{{ product['ID'] }}`)">Delete</button>
+                </div>
+                </div>
+                <form id="editForm{{ product['ID'] }}" style="display: none;">
+                    <label for="productName">Product Name:</label>
+                    <input type="text" id="productName{{ product['ID'] }}" value="{{ product['ProductName'] }}">
+                    
+                    <label for="productPrice">Product Price:</label>
+                    <input type="text" id="productPrice{{ product['ID'] }}" value="{{ product['Price'] }}">
+                    
+                    <label for="productRating">Product Price:</label>
+                    <input type="text" id="productRating{{ product['ID'] }}" value="{{ product['rating'] }}">
+                    
+                    <label for="productDescription">Product Description:</label>
+                    <textarea id="productDescription{{ product['ID'] }}" value="{{ product['ProductDescription'] }}">{{ product['ProductDescription'] }}</textarea>
+                    
+                    <button onclick="submitEdit(product['ID'])">Submit</button>
+                </form>
+            </div>
+            
+        {% endfor %}
     </div>
 
 
