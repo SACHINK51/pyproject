@@ -126,15 +126,15 @@
     </div>
     <div class="product-container">
         {% for product in products %}
-            <div class="product-card" id="{{product['ProductName']}}">
+            <div class="product-card" id="{{product['productID']}}">
                 <div class="product-view">
                     <div class="product-name">{{ product['ProductName'] }}</div>
                     <div class="product-price">${{ product['Price'] }}</div>
                     <div class="product-rating">Rating: {{ product['Rating'] }}</div>
                     <div class="product-description">{{ product['ProductDescription'] }}</div>
                     <div class="edit-delete-buttons">
-                    <button onclick=toggleEditForm(product.ID)>Edit</button>
-                    <button onclick="deleteProduct(product.ID)">Delete</button>
+                    <button onclick=toggleEditForm(product.productID)>Edit</button>
+                    <button onclick="deleteProduct(product.productID)">Delete</button>
                 </div>
                 </div>
                 <form id="editForm{{ product['ID'] }}" style="display: none;">
