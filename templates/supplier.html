@@ -126,74 +126,15 @@
     </div>
     <div class="product-container">
         {% for product in products %}
-            <div class="product-card" id="{{product['productID']}}">
-                <div class="product-view">
-                    {% if isEdit %}
-                        <input class="product-name" value="{{ product['ProductName'] }}"/>
-                        <input class="product-price" value="{{ product['Price'] }}"/>
-                        <label>Rating:</label> <input class="product-rating" value="{{ product['Rating'] }}"/>
-                        <input class="product-description" value="{{ product['ProductDescription'] }}"/>
-                    {% else %}
-                        <div class="product-name">{{ product['ProductName'] }}</div>
-                        <div class="product-price">${{ product['Price'] }}</div>
-                        <div class="product-rating">Rating: {{ product['Rating'] }}</div>
-                        <div class="product-description">{{ product['ProductDescription'] }}</div>
-                    {% endif %}
-                <div class="edit-delete-buttons">
-                    <button onclick="editProduct('{{ product.productID }}')">Edit</button>
-                    <button onclick="deleteProduct('{{ product.productID }}')">Delete</button>
-                </div>
-                </div>
-            </div>
-            
+        <form id="addProductForm" action=`/update_product/${{product['productID']}}` method="PUT">
+            <input type="text" id="addProductName" name="productName" placeholder="Product Name" value="{{ product['ProductName'] }}" required>
+            <input type="number" id="addProductPrice" name="price" placeholder="Price" value="{{ product['Price'] }}" required>
+            <input type="number" id="addProductRating" name="rating" placeholder="rating" value="{{ product['Rating'] }}" required>
+            <input type="text" id="addProductDescription" name="productDescription" placeholder="Product Description" value="{{ product['ProductDescription'] }}" required>
+            <button type="submit" name="submit">update</button>
+        </form>
+        <form id="addProductForm" action="/delete_product/{{product['productID']}}" method="PUT"><button type="submit" name="submit">delete</button></form>
         {% endfor %}
     </div>
-
-
-    <script>
-
-        let isEdit = false; 
-        
-        function editProduct(productID) {
-            isEdit = !isEdit
-        }
-
-        function submitEdit(productID) {
-            const productName = document.getElementById(`productName${productID}`).value;
-            const productPrice = document.getElementById(`productPrice${productID}`).value;
-            const productRating = document.getElementById(`productRating${productID}`).value;
-            const productDescription = document.getElementById(`productDescription${productID}`).value;
-
-            fetch(`/update`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    productID: productID,
-                    new_product_name: productName,
-                    new_price: productPrice,
-                    new_rating: productRating,
-                    new_product_description: productDescription,
-                }),
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Handle success, you can update the UI or perform other actions
-                console.log('Product updated:', data);
-                
-                // Optionally, hide the edit form after submitting
-                toggleEditForm(productID);
-            })
-            .catch(error => {
-                console.error('Error updating product:', error);
-            });
-        }
-    </script>
 </body>
 </html>
