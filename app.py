@@ -206,7 +206,7 @@ def add_product():
         # Insert product into the Product table
         insert_query = '''
             INSERT INTO Product (ProductName, Price, Rating, ProductDescription,userID)
-            VALUES (%s, %s, %s)
+            VALUES (%s, %s, %s, %s, %s)
         '''
         cursor = mysql.cursor()
         cursor.execute(insert_query, (ProductName, price, ProductDescription))
