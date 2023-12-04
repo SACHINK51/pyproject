@@ -262,7 +262,7 @@ def delete_product(product_id):
             cursor.execute(delete_query, (product_id,))
             mysql.commit()
 
-            return jsonify({'message': 'Product deleted successfully'}), 200
+            return redirect(url_for('supplier_dashboard'))
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
