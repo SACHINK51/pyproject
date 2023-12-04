@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_bcrypt import Bcrypt
-from flask_login import LoginManager, login_required, UserMixin, login_user
+from flask_login import LoginManager, login_required, UserMixin, login_user, logout_user, current_user
 import mysql.connector
 from flask_cors import CORS
 import json
@@ -38,25 +38,25 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
 class User(UserMixin):
-    def __init__(self, user_id, username, user_type):
-        self.id = user_id
-        self.username = username
-        self.user_type = user_type
+    def __init__(self, userID, userName, userType):
+        self.userID = userID
+        self.userName = userName
+        self.userType = userType
 
 @login_manager.user_loader
-def load_user(user_id):
-    print(user_id)
-    user = query_user_by_id(user_id)
+def load_user(userID):
+    print(userID)
+    user = query_user_by_id(userID)
     if user:
-        return User(user['user_id'], user['username'], user['user_type'])
+        return User(user['userID'], user['userName'], user['userType'])
     else:
         return None
 
-def query_user_by_id(user_id):
+def query_user_by_id(userID):
     # Replace this with your actual database query
-    select_query = 'SELECT * FROM User WHERE user_id = %s'
+    select_query = 'SELECT * FROM User WHERE userID = %s'
     cursor = mysql.cursor()
-    cursor.execute(select_query, (user_id,))
+    cursor.execute(select_query, (userID,))
     user = cursor.fetchone()
     
     if user:
@@ -67,8 +67,8 @@ def query_user_by_id(user_id):
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        username = request.form['userName']
-        user_type = request.form['userType']
+        userName = request.form['userName']
+        userType = request.form['userType']
         password = request.form['password']
 
         # Hash the password before storing it
@@ -76,11 +76,11 @@ def signup():
 
         # Insert user details into the database
         insert_query = '''
-            INSERT INTO User (UserName, UserType, Password)
+            INSERT INTO User (userName, UserType, Password)
             VALUES (%s, %s, %s)
         '''
         cursor = mysql.cursor(); #create a connection to the SQL instance
-        cursor.execute(insert_query, (username, user_type, hashed_password))
+        cursor.execute(insert_query, (userName, userType, hashed_password))
         mysql.commit()
 
         return 'Signup successful!'
@@ -90,37 +90,37 @@ def signup():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['userName']
-        user_type = request.form['userType']
+        userName = request.form['userName']
+        userType = request.form['userType']
         password = request.form['password']
 
         # Check if the user exists and the password is correct
         select_query = 'SELECT * FROM User WHERE userName = %s AND userType = %s'
         cursor = mysql.cursor(); #create a connection to the SQL instance
-        cursor.execute(select_query, (username, user_type))
+        cursor.execute(select_query, (userName, userType))
         user = cursor.fetchone()
 
         if user and bcrypt.check_password_hash(user[3], password):
             # Set user information in the session
             session['user_id'] = user[0]
-            session['username'] = user[1]
-            session['user_type'] = user[2]
+            session['userName'] = user[1]
+            session['userType'] = user[2]
 
             login_user(User(user[0], user[1], user[2]))
 
-            if session['user_type'] == "Supplier":
+            if session['userType'] == "Supplier":
                 return render_template('supplier.html')
             else:
                 return redirect(url_for('customer_dashboard'));
         else:
-            return 'Invalid username or password'
+            return 'Invalid userName or password'
 
     return render_template('login.html')
 
 @app.route("/customer_dashboard")
 @login_required
 def customer_dashboard():
-    if current_user.is_authenticated and current_user.user_type == "Customer":
+    if current_user.is_authenticated and current_user.userType == "Customer":
         cur = mysql.cursor()
         cur.execute('''SELECT * FROM Product''')
         rv = cur.fetchall()
@@ -145,8 +145,8 @@ def logout():
     logout_user()
     # Clear session data
     session.pop('user_id', None)
-    session.pop('username', None)
-    session.pop('user_type', None)
+    session.pop('userName', None)
+    session.pop('userType', None)
     return redirect(url_for('login'))
 
 @app.route("/") #Default - Show Data
