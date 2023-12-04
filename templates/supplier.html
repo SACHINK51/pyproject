@@ -77,7 +77,7 @@
             <input type="number" id="productPrice{{product['productID']}}" name="price" placeholder="Price" value="{{ product['Price'] }}" required>
             <input type="number" id="productRating{{product['productID']}}" name="rating" placeholder="rating" value="{{ product['Rating'] }}" required>
             <input type="text" id="productDescription{{product['productID']}}" name="productDescription" placeholder="Product Description" value="{{ product['ProductDescription'] }}" required>
-            <button type="button" name="submit" onclick="updateMethod('{{ product.productID }}')">update</button>
+            <button type="button" id="productID{{product['productID']}}" name="submit" onclick="updateMethod('{{ product.productID }}')">edit</button>
             <button type="button" name="submit" onclick="deleteMethod('{{ product.productID }}')">delete</button>
         </form>
         {% endfor %}
@@ -88,9 +88,11 @@
             const updatedProductPrice = document.getElementById(`productPrice${productID}`).value;
             const updatedProductRating = document.getElementById(`productRating${productID}`).value;
             const updatedProductDescription = document.getElementById(`productDescription${productID}`).value;
-
-            // Make a request to the Python API for updating the product
-            fetch(`/update_product/${productID}`, {
+            if(document.getElementById(`productID${productID}`).value== 'edit'){
+                document.getElementById(`productID${productID}`).value== 'update'
+            }
+            else{
+                fetch(`/update_product/${productID}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -107,6 +109,7 @@
                 window.location.reload()
                }
             });
+            }
         }
         function deleteMethod(productID){
             fetch(`/delete_product/${productID}`, {
