@@ -73,6 +73,24 @@
             border-radius: 5px;
             cursor: pointer;
         }
+        .search-bar {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .search-bar input {
+            padding: 8px;
+            margin-right: 10px;
+        }
+
+        .search-bar button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -84,7 +102,10 @@
             </form>
         </div>
     </header>
-
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search...">
+        <button type="button" onclick="searchMethod()">Search</button>
+    </div>
     <div class="product-container">
         {% for product in products %}
             <div class="product-card">
@@ -95,5 +116,23 @@
             </div>
         {% endfor %}
     </div>
+    <script>
+        function searchMethod() {
+            const searchTerm = document.getElementById('searchInput').value;
+            
+            // Make a request to the Python API for searching
+            fetch(`/search_product?term=${searchTerm}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    window.location.href = `/search_results?term=${searchTerm}`;
+                }
+            });
+        }
+    </script>
 </body>
 </html>
