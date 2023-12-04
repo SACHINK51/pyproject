@@ -81,12 +81,31 @@ def login():
             if session['user_type'] == "Supplier":
                 return render_template('supplier.html')
             else:
-                return render_template('customer.html')
+                return redirect(url_for('customer_dashboard'));
         else:
             return 'Invalid username or password'
 
     return render_template('login.html')
-	
+
+@app.route("/customer_dashboard")
+def customer_dashboard():
+    cur = mysql.cursor()
+    cur.execute('''SELECT * FROM Product''')
+    rv = cur.fetchall()
+    products = []
+
+    for row in rv:
+        product = {
+            'ProductName': row[0].replace('\n', ' '),
+            'Price': row[1],
+            'Rating': row[2],
+            'ProductDescription': row[3],
+            'ID': row[4]
+        }
+        products.append(product)
+
+    return render_template('customer.html', products=products)
+
 @app.route("/") #Default - Show Data
 def hello(): # Name of the method
     cur = mysql.cursor() #create a connection to the SQL instance
