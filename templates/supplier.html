@@ -143,10 +143,10 @@
 
     <div class="add-product-form">
         <form id="addProductForm">
-            <input type="text" name="productName" placeholder="Product Name" required>
-            <input type="number" name="price" placeholder="Price" required>
-            <input type="number" name="rating" placeholder="rating" required>
-            <input type="text" name="productDescription" placeholder="Product Description" required>
+            <input type="text" id="addProductName" name="productName" placeholder="Product Name" required>
+            <input type="number" id="addProductPrice" name="price" placeholder="Price" required>
+            <input type="number" id="addProductRating" name="rating" placeholder="rating" required>
+            <input type="text" id="addProductDescription" name="productDescription" placeholder="Product Description" required>
             <button type="button" onclick="addProduct()">Add Product</button>
         </form>
     </div>
@@ -222,10 +222,10 @@
         }
         function addProduct() {
             // Get values from the form
-            const productName = document.getElementById('productName').value;
-            const price = document.getElementById('price').value;
-            const rating = document.getElementById('rating').value;
-            const productDescription = document.getElementById('productDescription').value;
+            const addProductName = document.getElementById('productName').value;
+            const addProductPrice = document.getElementById('price').value;
+            const addProductRating = document.getElementById('rating').value;
+            const addProductDescription = document.getElementById('productDescription').value;
             print('Session:',session['userName']);
             const userID = session['userID'];
 
