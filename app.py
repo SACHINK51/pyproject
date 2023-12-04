@@ -194,35 +194,26 @@ def hello(): # Name of the method
     )
     return ret #Return the data in a string format
 
-@app.route('/add_product', methods=['GET','POST'])
+@app.route('/add_product', methods=['POST'])
+@login_required
 def add_product():
-    try:
-        # data = request.get_json()
-        # ProductName = data.get('productName')
-        # price = data.get('price')
-        # rating = data.get('rating')
-        # ProductDescription = data.get('productDescription')
-        # userID = data.get('userID')
-        if request.method == 'POST':
-            ProductName = request.form('productName')
-            price = request.form('price')
-            rating = request.form('rating')
-            ProductDescription = request.form('productDescription')
-            userID = request.form('userID')
-            
-            # Insert product into the Product table
-            insert_query = '''
-                INSERT INTO Product (ProductName, Price, Rating, ProductDescription,userID)
-                VALUES (%s, %s, %s)
-            '''
-            cursor = mysql.cursor()
-            cursor.execute(insert_query, (ProductName, price, ProductDescription))
-            mysql.commit()
+    if request.method == 'POST':
+        ProductName = request.form('productName')
+        price = request.form('price')
+        rating = request.form('rating')
+        ProductDescription = request.form('productDescription')
+        userID = request.form('userID')
+        
+        # Insert product into the Product table
+        insert_query = '''
+            INSERT INTO Product (ProductName, Price, Rating, ProductDescription,userID)
+            VALUES (%s, %s, %s)
+        '''
+        cursor = mysql.cursor()
+        cursor.execute(insert_query, (ProductName, price, ProductDescription))
+        mysql.commit()
 
-        return '{"Result":"Success"}'
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+    return '{"Result":"Success"}'
 
 @app.route('/update_product/<int:product_id>', methods=['PUT'])
 def update_product(product_id):
