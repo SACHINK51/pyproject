@@ -121,17 +121,18 @@ def login():
 def customer_dashboard():
     if current_user.is_authenticated and current_user.userType == "Customer":
         cur = mysql.cursor()
-        cur.execute('''SELECT * FROM Product''')
-        rv = cur.fetchall()
+        cur.execute('''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID''')
+        results  = cur.fetchall()
         products = []
         print('rv : ',rv);
-        for row in rv:
+        for row in results :
             product = {
                 'productID': row[0],
                 'ProductName': row[1],
                 'Price': row[2],
                 'Rating': row[3],
-                'ProductDescription': row[4]
+                'ProductDescription': row[4],
+                'userName': row[6]
             }
             products.append(product)
 

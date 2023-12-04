@@ -54,6 +54,12 @@
             margin-bottom: 10px;
         }
 
+        .user-name {
+            font-size: 1em;
+            color: #333;
+            margin-top: 5px;
+        }
+
         .logout-button {
             margin-top: 20px;
             text-align: center;
@@ -85,6 +91,7 @@
                 <div class="product-name">{{ product['ProductName'] }}</div>
                 <div class="product-price">${{ product['Price'] }}</div>
                 <div class="product-description">{{ product['ProductDescription'] }}</div>
+                <div class="user-name">User Name: {{ product['UserName'] }}</div>
             </div>
         {% endfor %}
     </div>
