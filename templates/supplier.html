@@ -72,15 +72,43 @@
     </div>
     <div class="product-container">
         {% for product in products %}
-        <form class="formHead" id="updateForm{{product['productID']}}" action="/update_product/{{product['productID']}}" method="PUT">
-            <input type="text" id="addProductName" name="productName" placeholder="Product Name" value="{{ product['ProductName'] }}" required>
-            <input type="number" id="addProductPrice" name="price" placeholder="Price" value="{{ product['Price'] }}" required>
-            <input type="number" id="addProductRating" name="rating" placeholder="rating" value="{{ product['Rating'] }}" required>
-            <input type="text" id="addProductDescription" name="productDescription" placeholder="Product Description" value="{{ product['ProductDescription'] }}" required>
-            <button type="submit" name="submit">update</button>
+        <form class="formHead" id="updateForm{{product['productID']}}">
+            <input type="text" id="ProductName{{product['productID']}}" name="productName" placeholder="Product Name" value="{{ product['ProductName'] }}" required>
+            <input type="number" id="ProductPrice{{product['productID']}}" name="price" placeholder="Price" value="{{ product['Price'] }}" required>
+            <input type="number" id="ProductRating{{product['productID']}}" name="rating" placeholder="rating" value="{{ product['Rating'] }}" required>
+            <input type="text" id="ProductDescription{{product['productID']}}" name="productDescription" placeholder="Product Description" value="{{ product['ProductDescription'] }}" required>
+            <button type="button" name="submit" onclick="updateMethod('{{ product.productID }}')">update</button>
+            <button type="button" name="submit" onclick="deleteMethod('{{ product.productID }}')">delete</button>
         </form>
-        <form class="formHead" id="deleteForm{{product['productID']}}" action="/delete_product/{{product['productID']}}" method="DELETE"><button type="submit" name="submit">delete</button></form>
         {% endfor %}
     </div>
+    <script>
+        function updateMethod(productID){
+            const updatedProductName = document.getElementById(`productName${productID}`).value;
+            const updatedProductPrice = document.getElementById(`productPrice${productID}`).value;
+            const updatedProductRating = document.getElementById(`productPrice${productID}`).value;
+            const updatedProductDescription = document.getElementById(`productDescription${productID}`).value;
+
+            // Make a request to the Python API for updating the product
+            fetch(`/update_product/${productID}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    new_product_name: updatedProductName,
+                    new_price: updatedProductPrice,
+                    new_rating: updatedProductRating,
+                    new_product_description: updatedProductDescription,
+                }),
+            })
+            .then(response => {
+               console.log(response.status)
+            });
+        }
+        function deleteMethod(productID){
+
+        }        
+    </script>
 </body>
 </html>

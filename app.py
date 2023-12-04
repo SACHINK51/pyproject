@@ -221,11 +221,12 @@ def add_product():
 @app.route('/update_product/<int:product_id>', methods=['GET','PUT'])
 def update_product(product_id):
     try:
-        if request.method == 'GET':
-            productName = request.form['productName']
-            price = request.form['price']
-            rating = request.form['rating']
-            productDescription = request.form['productDescription']
+        if request.method == 'PUT':
+            data = request.get_json()
+            productName = data.get('new_product_name')
+            price = data.get('new_price')
+            rating = data.get('new_rating')
+            productDescription = data.get('new_product_description')
             userID = session.get('userID')
             productID = product_id
 
