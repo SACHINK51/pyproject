@@ -43,15 +43,27 @@ class User(UserMixin):
         self.username = username
         self.user_type = user_type
 
-# @login_manager.user_loader
-# def load_user(user_id):
-#     user = query_user_by_id(user_id)
+@login_manager.user_loader
+def load_user(user_id):
+    print(user_id)
+    user = query_user_by_id(user_id)
+    if user:
+        return User(user['user_id'], user['username'], user['user_type'])
+    else:
+        return None
 
-#     if user:
-#         return User(user['user_id'], user['username'], user['user_type'])
-#     else:
-#         return None
-
+def query_user_by_id(user_id):
+    # Replace this with your actual database query
+    select_query = 'SELECT * FROM User WHERE user_id = %s'
+    cursor = mysql.cursor()
+    cursor.execute(select_query, (user_id,))
+    user = cursor.fetchone()
+    
+    if user:
+        return User(user[0], user[1], user[2])
+    else:
+        return None
+    
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
