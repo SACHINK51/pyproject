@@ -27,34 +27,48 @@
         }
 
         .product-card {
-            margin-top: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            padding: 15px;
+            width: 300px;
+            background-color: #fff;
             text-align: center;
         }
 
         .product-name {
-            padding: 8px;
-            margin-right: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
         }
 
         .product-price {
-            padding: 8px;
-            margin-right: 10px;
+            color: #007bff;
+            font-size: 1.1em;
+            margin-bottom: 10px;
         }
 
         .product-rating{
-            padding: 8px;
-            margin-right: 10px;
+            font-size: 1em;
+            margin-bottom: 10px;
         }
         .product-description {
-            padding: 8px;
-            margin-right: 10px;
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+
+        .edit-delete-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
         }
 
         .edit-delete-buttons button {
-            background-color: #28a745;
+            background-color: #007bff;
             color: #fff;
             border: none;
-            padding: 8px 16px;
+            padding: 5px 10px;
             border-radius: 5px;
             cursor: pointer;
         }
@@ -119,8 +133,8 @@
                     <div class="product-rating">Rating: {{ product['Rating'] }}</div>
                     <div class="product-description">{{ product['ProductDescription'] }}</div>
                     <div class="edit-delete-buttons">
-                    <button onclick=toggleEditForm(product[ID])>Edit</button>
-                    <button onclick="deleteProduct(`{ product['ID'] }`)">Delete</button>
+                    <button onclick=toggleEditForm(product.ID)>Edit</button>
+                    <button onclick="deleteProduct(product.ID)">Delete</button>
                 </div>
                 </div>
                 <form id="editForm{{ product['ID'] }}" style="display: none;">
@@ -143,5 +157,51 @@
         {% endfor %}
     </div>
 
+
+    <script>
+        function toggleEditForm(productID) {
+            const editForm = document.getElementById(`editForm${productID}`);
+            if (editForm.style.display === 'none') {
+                editForm.style.display = 'block';
+            } else {
+                editForm.style.display = 'none';
+            }
+        }
+
+        function submitEdit(productID) {
+            const productName = document.getElementById(`productName${productID}`).value;
+            const productPrice = document.getElementById(`productPrice${productID}`).value;
+            const productDescription = document.getElementById(`productDescription${productID}`).value;
+
+            fetch(`/update`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    productID: productID,
+                    new_product_name: productName,
+                    new_price: productPrice,
+                    new_product_description: productDescription,
+                }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Handle success, you can update the UI or perform other actions
+                console.log('Product updated:', data);
+                
+                // Optionally, hide the edit form after submitting
+                toggleEditForm(productID);
+            })
+            .catch(error => {
+                console.error('Error updating product:', error);
+            });
+        }
+    </script>
 </body>
 </html>
