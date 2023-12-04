@@ -194,28 +194,7 @@ def hello(): # Name of the method
     )
     return ret #Return the data in a string format
 
-@app.route('/supplier', methods=['GET', 'POST'])
-def supplier():
-    if request.method == 'POST':
-        # Get product details from the form
-        product_name = request.form['productName']
-        price = request.form['price']
-        rating = request.form['rating']
-        product_description = request.form['productDescription']
-
-        # Insert product into the Product table
-        insert_query = '''
-            INSERT INTO Product (ProductName, Price, Rating, ProductDescription)
-            VALUES (%s, %s, %s, %s)
-        '''
-        cursor = mysql.cursor(); #create a connection to the SQL instance
-        cursor.execute(insert_query, (product_name, price, rating, product_description))
-        mysql.commit()
-        
-        return render_template('supplier.html')
-	
-
-@app.route('/add_product', methods=['POST'])
+@app.route('/add_product', methods=['GET','POST'])
 def add_product():
     try:
         # data = request.get_json()
@@ -224,22 +203,23 @@ def add_product():
         # rating = data.get('rating')
         # ProductDescription = data.get('productDescription')
         # userID = data.get('userID')
-        ProductName = request.form('productName')
-        price = request.form('price')
-        rating = request.form('rating')
-        ProductDescription = request.form('productDescription')
-        userID = request.form('userID')
-        
-        # Insert product into the Product table
-        insert_query = '''
-            INSERT INTO Product (ProductName, Price, Rating, ProductDescription,userID)
-            VALUES (%s, %s, %s)
-        '''
-        cursor = mysql.cursor()
-        cursor.execute(insert_query, (ProductName, price, ProductDescription))
-        mysql.commit()
+        if request.method == 'POST':
+            ProductName = request.form('productName')
+            price = request.form('price')
+            rating = request.form('rating')
+            ProductDescription = request.form('productDescription')
+            userID = request.form('userID')
+            
+            # Insert product into the Product table
+            insert_query = '''
+                INSERT INTO Product (ProductName, Price, Rating, ProductDescription,userID)
+                VALUES (%s, %s, %s)
+            '''
+            cursor = mysql.cursor()
+            cursor.execute(insert_query, (ProductName, price, ProductDescription))
+            mysql.commit()
 
-        return jsonify({'message': 'Product added successfully'}), 201
+        return redirect(url_for('supplier_dashboard'))
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
