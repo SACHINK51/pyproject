@@ -89,23 +89,23 @@ def login():
 	
 @app.route("/") #Default - Show Data
 def hello(): # Name of the method
-  cur = mysql.cursor() #create a connection to the SQL instance
-  cur.execute('''SELECT * FROM Product''') # execute an SQL statment
-  rv = cur.fetchall() #Retreive all rows returend by the SQL statment
-  Results=[]
-  for row in rv: #Format the Output Results and add to return string
-    Result={}
-    Result['ProductName']=row[0].replace('\n',' ')
-    Result['Price']=row[1]
-    Result['Rating']=row[2]
-    Result['ProductDescription']=row[3]
-    Result['ID']=row[4]
-    Results.append(Result)
+    cur = mysql.cursor() #create a connection to the SQL instance
+    cur.execute('''SELECT * FROM Product''') # execute an SQL statment
+    rv = cur.fetchall() #Retreive all rows returend by the SQL statment
+    Results=[]
+    for row in rv: #Format the Output Results and add to return string
+        Result={}
+        Result['ProductName']=row[0].replace('\n',' ')
+        Result['Price']=row[1]
+        Result['Rating']=row[2]
+        Result['ProductDescription']=row[3]
+        Result['ID']=row[4]
+        Results.append(Result)
     response={'Results':Results, 'count':len(Results)}
     ret=app.response_class(
-    response=json.dumps(response),
-    status=200,
-    mimetype='application/json'
+        response=json.dumps(response),
+        status=200,
+        mimetype='application/json'
     )
     return ret #Return the data in a string format
 
