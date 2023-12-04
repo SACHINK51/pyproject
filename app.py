@@ -238,10 +238,12 @@ def update_product(product_id):
             update_query = '''
                 UPDATE Product
                 SET productName = %s, price = %s, rating = %s productDescription = %s
-                WHERE productID = %s
+                WHERE productID = %s;
             '''
+            print('update_query',update_query)
             cursor = mysql.cursor()
-            cursor.execute(update_query, (productName, price, rating, productDescription, productID))
+            resp = cursor.execute(update_query, (productName, price, rating, productDescription, productID))
+            print(resp)
             mysql.commit()
 
             return redirect(url_for('supplier_dashboard'))
