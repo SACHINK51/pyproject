@@ -117,8 +117,11 @@
                 <label for="productPrice">Product Price:</label>
                 <input type="text" id="productPrice{{ product['ID'] }}" value="{{ product['Price'] }}">
                 
+                <label for="productRating">Product Price:</label>
+                <input type="text" id="productRating{{ product['ID'] }}" value="{{ product['rating'] }}">
+                
                 <label for="productDescription">Product Description:</label>
-                <textarea id="productDescription{{ product['ID'] }}">{{ product['ProductDescription'] }}</textarea>
+                <textarea id="productDescription{{ product['ID'] }}" value="{{ product['ProductDescription'] }}">{{ product['ProductDescription'] }}</textarea>
                 
                 <button onclick="submitEdit(product['ID'])">Submit</button>
             </form>
@@ -129,6 +132,7 @@
         <form id="addProductForm">
             <input type="text" name="productName" placeholder="Product Name" required>
             <input type="number" name="price" placeholder="Price" required>
+            <input type="number" name="rating" placeholder="rating" required>
             <input type="text" name="productDescription" placeholder="Product Description" required>
             <button type="button" onclick="addProduct()">Add Product</button>
         </form>
@@ -207,7 +211,10 @@
             // Get values from the form
             const productName = document.getElementById('productName').value;
             const price = document.getElementById('price').value;
+            const rating = document.getElementById('rating').value;
             const productDescription = document.getElementById('productDescription').value;
+            print('Session:',session['userName']);
+            const userID = session['userID'];
 
             // Call the Python API to add the product
             fetch('/add_product', {

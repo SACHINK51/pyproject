@@ -219,17 +219,19 @@ def supplier():
 def add_product():
     try:
         data = request.get_json()
-        product_name = data.get('productName')
+        ProductName = data.get('productName')
         price = data.get('price')
-        product_description = data.get('productDescription')
-
+        rating = data.get('rating')
+        ProductDescription = data.get('productDescription')
+        userID = data.get('userID')
+        
         # Insert product into the Product table
         insert_query = '''
-            INSERT INTO Product (ProductName, Price, ProductDescription)
+            INSERT INTO Product (ProductName, Price, Rating, ProductDescription,userID)
             VALUES (%s, %s, %s)
         '''
         cursor = mysql.cursor()
-        cursor.execute(insert_query, (product_name, price, product_description))
+        cursor.execute(insert_query, (ProductName, price, ProductDescription))
         mysql.commit()
 
         return jsonify({'message': 'Product added successfully'}), 201
