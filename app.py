@@ -218,12 +218,17 @@ def supplier():
 @app.route('/add_product', methods=['POST'])
 def add_product():
     try:
-        data = request.get_json()
-        ProductName = data.get('productName')
-        price = data.get('price')
-        rating = data.get('rating')
-        ProductDescription = data.get('productDescription')
-        userID = data.get('userID')
+        # data = request.get_json()
+        # ProductName = data.get('productName')
+        # price = data.get('price')
+        # rating = data.get('rating')
+        # ProductDescription = data.get('productDescription')
+        # userID = data.get('userID')
+        ProductName = request.form('productName')
+        price = request.form('price')
+        rating = request.form('rating')
+        ProductDescription = request.form('productDescription')
+        userID = request.form('userID')
         
         # Insert product into the Product table
         insert_query = '''

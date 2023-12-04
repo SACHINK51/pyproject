@@ -141,13 +141,14 @@
         {% endfor %}
     </div>
 
-    <div class="add-product-form">
+    <div class="add-product-form" action="/add_product">
         <form id="addProductForm">
             <input type="text" id="addProductName" name="productName" placeholder="Product Name" required>
             <input type="number" id="addProductPrice" name="price" placeholder="Price" required>
             <input type="number" id="addProductRating" name="rating" placeholder="rating" required>
             <input type="text" id="addProductDescription" name="productDescription" placeholder="Product Description" required>
-            <button type="button" onclick="addProduct()">Add Product</button>
+            <input type="number" id="addUserID" name="userID" placeholder="Product Description" value="{{session['userID']}}" required>
+            <button type="button"">Add Product</button>
         </form>
     </div>
 
