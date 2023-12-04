@@ -254,7 +254,7 @@ def update_product(product_id):
 @app.route('/delete_product/<int:product_id>', methods=['GET','DELETE'])
 def delete_product(product_id):
     try:
-        if request.method == 'GET':
+        if request.method == 'DELETE':
             delete_query = '''
                 DELETE FROM Product WHERE ProductID = %s
             '''
