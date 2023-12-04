@@ -72,16 +72,12 @@ def login():
         cursor = mysql.cursor(); #create a connection to the SQL instance
         cursor.execute(select_query, (username, user_type))
         user = cursor.fetchone()
-        print("Username:", username)
-        print("password:", password)
-        print("User Type:", user_type)
-        print("User:", user)
-        stored_password = str(user[3])  # Assuming the hashed password is stored as an integer
-        if user and bcrypt.check_password_hash(stored_password, password):
+
+        if user and bcrypt.check_password_hash(user[2], password):
             # Set user information in the session
-            session['user_id'] = user[0]
-            session['username'] = user[1]
-            session['user_type'] = user[2]
+            session['user_id'] = user[3]
+            session['username'] = user[0]
+            session['user_type'] = user[1]
             if session['user_type'] == "Supplier":
                 return render_template('supplier.html')
             else:
