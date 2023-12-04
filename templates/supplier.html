@@ -127,10 +127,11 @@
                 <div class="product-view">
                     <div class="product-name">{{ product['ProductName'] }}</div>
                     <div class="product-price">${{ product['Price'] }}</div>
+                    <div class="product-rating">${{ product['Rating'] }}</div>
                     <div class="product-description">{{ product['ProductDescription'] }}</div>
                     <div class="edit-delete-buttons">
-                    <button onclick="toggleEditForm(`{{ product['ID'] }}`)">Edit</button>
-                    <button onclick="deleteProduct(`{{ product['ID'] }}`)">Delete</button>
+                    <button onclick=toggleEditForm()>Edit</button>
+                    <button onclick="deleteProduct(`{ product['ID'] }`)">Delete</button>
                 </div>
                 </div>
                 <form id="editForm{{ product['ID'] }}" style="display: none;">
@@ -140,7 +141,7 @@
                     <label for="productPrice">Product Price:</label>
                     <input type="text" id="productPrice{{ product['ID'] }}" value="{{ product['Price'] }}">
                     
-                    <label for="productRating">Product Price:</label>
+                    <label for="productRating">Product Rating:</label>
                     <input type="text" id="productRating{{ product['ID'] }}" value="{{ product['rating'] }}">
                     
                     <label for="productDescription">Product Description:</label>
@@ -163,36 +164,12 @@
                 editForm.style.display = 'none';
             }
         }
-        function editProduct(productID) {
-            // Implement edit product functionality
-            console.log('Edit product:', productID);
-        }
 
-        function deleteProduct(productID) {
-            // Call the Python API to delete the product
-            fetch(`/delete/${productID}`, {
-                method: 'DELETE',
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Handle success, you can update the UI or perform other actions
-                console.log('Product deleted:', data);
-            })
-            .catch(error => {
-                console.error('Error deleting product:', error);
-            });
-        }
         function submitEdit(productID) {
             const productName = document.getElementById(`productName${productID}`).value;
             const productPrice = document.getElementById(`productPrice${productID}`).value;
             const productDescription = document.getElementById(`productDescription${productID}`).value;
 
-            // Call the Python API to update the product
             fetch(`/update`, {
                 method: 'POST',
                 headers: {
@@ -220,42 +197,6 @@
             })
             .catch(error => {
                 console.error('Error updating product:', error);
-            });
-        }
-        function addProduct() {
-            // Get values from the form
-            const productName = document.getElementById('addProductName').value;
-            const price = document.getElementById('addProductPrice').value;
-            const rating = document.getElementById('addProductRating').value;
-            const productDescription = document.getElementById('addProductDescription').value;
-            const userID = "{{session['userID']}}";
-
-            // Call the Python API to add the product
-            fetch('/add_product', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    productName,
-                    price,
-                    rating,
-                    productDescription,
-                    userID
-                }),
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Handle success, you can update the UI or perform other actions
-                console.log('Product added:', data);
-            })
-            .catch(error => {
-                console.error('Error adding product:', error);
             });
         }
     </script>
