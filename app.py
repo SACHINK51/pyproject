@@ -45,7 +45,6 @@ class User(UserMixin):
 
 @login_manager.user_loader
 def load_user(userID):
-    print(userID)
     user = query_user_by_id(userID)
     if user:
         return user
@@ -125,14 +124,14 @@ def customer_dashboard():
         cur.execute('''SELECT * FROM Product''')
         rv = cur.fetchall()
         products = []
-
+        print('rv : ',rv);
         for row in rv:
             product = {
-                'ProductName': row[0].replace('\n', ' '),
-                'Price': row[1],
-                'Rating': row[2],
-                'ProductDescription': row[3],
-                'ID': row[4]
+                'productID': row[0],
+                'ProductName': row[1],
+                'Price': row[2],
+                'Rating': row[3],
+                'ProductDescription': row[4]
             }
             products.append(product)
 
