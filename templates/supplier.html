@@ -128,7 +128,7 @@
         {% for product in products %}
             <div class="product-card" id="{{product['productID']}}">
                 <div class="product-view">
-                    {% if !isEdit %}
+                    {% if isEdit == false %}
                         <div class="product-name">{{ product['ProductName'] }}</div>
                         <div class="product-price">${{ product['Price'] }}</div>
                         <div class="product-rating">Rating: {{ product['Rating'] }}</div>
@@ -138,6 +138,7 @@
                         <input class="product-price" value="{{ product['Price'] }}"/>
                         Rating: <input class="product-rating" value="{{ product['Rating'] }}"/>
                         <input class="product-description" value="{{ product['ProductDescription'] }}"/>
+                    {% endif %}
                 <div class="edit-delete-buttons">
                     <button onclick="editProduct('{{ product.productID }}')">Edit</button>
                     <button onclick="deleteProduct('{{ product.productID }}')">Delete</button>
