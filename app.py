@@ -209,7 +209,7 @@ def add_product():
             VALUES (%s, %s, %s, %s, %s)
         '''
         cursor = mysql.cursor()
-        cursor.execute(insert_query, (productName, price, rating, ProductDescription, userID))
+        cursor.execute(insert_query, (productName, price, rating, productDescription, userID))
         mysql.commit()
 
     return redirect(url_for('supplier_dashboard'))
