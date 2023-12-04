@@ -124,9 +124,7 @@ def customer_dashboard():
         cur.execute('''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID''')
         results  = cur.fetchall()
         products = []
-        print('results : ',results);
         for row in results :
-            print('row',row[6])
             product = {
                 'productID': row[0],
                 'ProductName': row[1],
