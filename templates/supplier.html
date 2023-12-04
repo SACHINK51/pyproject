@@ -128,16 +128,16 @@
         {% for product in products %}
             <div class="product-card" id="{{product['productID']}}">
                 <div class="product-view">
-                    {% if isEdit == false %}
+                    {% if isEdit %}
+                        <input class="product-name" value="{{ product['ProductName'] }}"/>
+                        <input class="product-price" value="{{ product['Price'] }}"/>
+                        <label>Rating:</label> <input class="product-rating" value="{{ product['Rating'] }}"/>
+                        <input class="product-description" value="{{ product['ProductDescription'] }}"/>
+                    {% else %}
                         <div class="product-name">{{ product['ProductName'] }}</div>
                         <div class="product-price">${{ product['Price'] }}</div>
                         <div class="product-rating">Rating: {{ product['Rating'] }}</div>
                         <div class="product-description">{{ product['ProductDescription'] }}</div>
-                    {% else %}
-                        <input class="product-name" value="{{ product['ProductName'] }}"/>
-                        <input class="product-price" value="{{ product['Price'] }}"/>
-                        Rating: <input class="product-rating" value="{{ product['Rating'] }}"/>
-                        <input class="product-description" value="{{ product['ProductDescription'] }}"/>
                     {% endif %}
                 <div class="edit-delete-buttons">
                     <button onclick="editProduct('{{ product.productID }}')">Edit</button>
