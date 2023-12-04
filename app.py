@@ -201,7 +201,7 @@ def add_product():
         price = request.form['price']
         rating = request.form['rating']
         productDescription = request.form['productDescription']
-        userID = request.form['userID']
+        userID = session.get('userID')
         
         # Insert product into the Product table
         insert_query = '''

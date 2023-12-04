@@ -123,14 +123,14 @@
     </div>
     <div class="product-container">
         {% for product in products %}
-            <div class="product-card" id={{ product['ProductName'] }}>
+            <div class="product-card" id=product['ProductName']>
                 <div class="product-view">
                     <div class="product-name">{{ product['ProductName'] }}</div>
                     <div class="product-price">${{ product['Price'] }}</div>
                     <div class="product-rating">${{ product['Rating'] }}</div>
                     <div class="product-description">{{ product['ProductDescription'] }}</div>
                     <div class="edit-delete-buttons">
-                    <button onclick=toggleEditForm()>Edit</button>
+                    <button onclick=toggleEditForm(product[ID])>Edit</button>
                     <button onclick="deleteProduct(`{ product['ID'] }`)">Delete</button>
                 </div>
                 </div>
