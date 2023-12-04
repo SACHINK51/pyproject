@@ -126,6 +126,7 @@ def customer_dashboard():
         products = []
         print('results : ',results);
         for row in results :
+            print('row',row)
             product = {
                 'productID': row[0],
                 'ProductName': row[1],
