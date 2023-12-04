@@ -128,30 +128,21 @@
         {% for product in products %}
             <div class="product-card" id="{{product['productID']}}">
                 <div class="product-view">
-                    <div class="product-name">{{ product['ProductName'] }}</div>
-                    <div class="product-price">${{ product['Price'] }}</div>
-                    <div class="product-rating">Rating: {{ product['Rating'] }}</div>
-                    <div class="product-description">{{ product['ProductDescription'] }}</div>
-                    <div class="edit-delete-buttons">
-                    <button onclick="toggleEditForm('{{ product.productID }}')">Edit</button>
+                    {% if !isEdit %}
+                        <div class="product-name">{{ product['ProductName'] }}</div>
+                        <div class="product-price">${{ product['Price'] }}</div>
+                        <div class="product-rating">Rating: {{ product['Rating'] }}</div>
+                        <div class="product-description">{{ product['ProductDescription'] }}</div>
+                    {% else %}
+                        <input class="product-name" value="{{ product['ProductName'] }}"/>
+                        <input class="product-price" value="{{ product['Price'] }}"/>
+                        Rating: <input class="product-rating" value="{{ product['Rating'] }}"/>
+                        <input class="product-description" value="{{ product['ProductDescription'] }}"/>
+                <div class="edit-delete-buttons">
+                    <button onclick="editProduct('{{ product.productID }}')">Edit</button>
                     <button onclick="deleteProduct('{{ product.productID }}')">Delete</button>
                 </div>
                 </div>
-                <form id="editForm{{ product['ID'] }}" style="display: none;">
-                    <label for="productName">Product Name:</label>
-                    <input type="text" id="productName{{ product['ID'] }}" value="{{ product['ProductName'] }}">
-                    
-                    <label for="productPrice">Product Price:</label>
-                    <input type="text" id="productPrice{{ product['ID'] }}" value="{{ product['Price'] }}">
-                    
-                    <label for="productRating">Product Rating:</label>
-                    <input type="text" id="productRating{{ product['ID'] }}" value="{{ product['rating'] }}">
-                    
-                    <label for="productDescription">Product Description:</label>
-                    <textarea id="productDescription{{ product['ID'] }}" value="{{ product['ProductDescription'] }}">{{ product['ProductDescription'] }}</textarea>
-                    
-                    <button onclick="submitEdit(product['ID'])">Submit</button>
-                </form>
             </div>
             
         {% endfor %}
@@ -159,18 +150,17 @@
 
 
     <script>
-        function toggleEditForm(productID) {
-            const editForm = document.getElementById(`editForm${productID}`);
-            if (editForm.style.display === 'none') {
-                editForm.style.display = 'block';
-            } else {
-                editForm.style.display = 'none';
-            }
+
+        let isEdit = false; 
+        
+        function editProduct(productID) {
+            isEdit = !isEdit
         }
 
         function submitEdit(productID) {
             const productName = document.getElementById(`productName${productID}`).value;
             const productPrice = document.getElementById(`productPrice${productID}`).value;
+            const productRating = document.getElementById(`productRating${productID}`).value;
             const productDescription = document.getElementById(`productDescription${productID}`).value;
 
             fetch(`/update`, {
@@ -182,6 +172,7 @@
                     productID: productID,
                     new_product_name: productName,
                     new_price: productPrice,
+                    new_rating: productRating,
                     new_product_description: productDescription,
                 }),
             })
