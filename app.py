@@ -221,40 +221,41 @@ def add_product():
 @app.route('/update_product/<int:product_id>', methods=['GET','PUT'])
 def update_product(product_id):
     try:
-        productName = request.form['productName']
-        price = request.form['price']
-        rating = request.form['rating']
-        productDescription = request.form['productDescription']
-        userID = session.get('userID')
-        productID = product_id
+        if request.method == 'PUT':
+            productName = request.form['productName']
+            price = request.form['price']
+            rating = request.form['rating']
+            productDescription = request.form['productDescription']
+            userID = session.get('userID')
+            productID = product_id
 
-        # Update product in the Product table
-        update_query = '''
-            UPDATE Product
-            SET productName = %s, price = %s, rating = %s productDescription = %s, userID = %s
-            WHERE productID = %s
-        '''
-        cursor = mysql.cursor()
-        cursor.execute(update_query, (productName, price, rating, productDescription, userID, productID))
-        mysql.commit()
+            # Update product in the Product table
+            update_query = '''
+                UPDATE Product
+                SET productName = %s, price = %s, rating = %s productDescription = %s, userID = %s
+                WHERE productID = %s
+            '''
+            cursor = mysql.cursor()
+            cursor.execute(update_query, (productName, price, rating, productDescription, userID, productID))
+            mysql.commit()
 
-        return redirect(url_for('supplier_dashboard'))
+            return redirect(url_for('supplier_dashboard'))
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@app.route('/delete_product/<int:product_id>', methods=['DELETE'])
+@app.route('/delete_product/<int:product_id>', methods=['GET','DELETE'])
 def delete_product(product_id):
     try:
-        # Delete product from the Product table
-        delete_query = '''
-            DELETE FROM Product WHERE ProductID = %s
-        '''
-        cursor = mysql.cursor()
-        cursor.execute(delete_query, (product_id,))
-        mysql.commit()
+        if request.method == 'DELETE':
+            delete_query = '''
+                DELETE FROM Product WHERE ProductID = %s
+            '''
+            cursor = mysql.cursor()
+            cursor.execute(delete_query, (product_id,))
+            mysql.commit()
 
-        return jsonify({'message': 'Product deleted successfully'}), 200
+            return jsonify({'message': 'Product deleted successfully'}), 200
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
