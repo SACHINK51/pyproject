@@ -197,19 +197,19 @@ def hello(): # Name of the method
 @app.route('/add_product', methods=['GET','POST'])
 def add_product():
     if request.method == 'POST':
-        ProductName = request.form['productName']
+        productName = request.form['productName']
         price = request.form['price']
         rating = request.form['rating']
-        ProductDescription = request.form['productDescription']
+        productDescription = request.form['productDescription']
         userID = request.form['userID']
         
         # Insert product into the Product table
         insert_query = '''
-            INSERT INTO Product (ProductName, Price, Rating, ProductDescription,userID)
+            INSERT INTO Product (productName, price, rating, productDescription, userID)
             VALUES (%s, %s, %s, %s, %s)
         '''
         cursor = mysql.cursor()
-        cursor.execute(insert_query, (ProductName, price, ProductDescription))
+        cursor.execute(insert_query, (productName, price, rating, ProductDescription, userID))
         mysql.commit()
 
     return redirect(url_for('supplier_dashboard'))
