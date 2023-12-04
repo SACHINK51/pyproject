@@ -136,7 +136,7 @@ def customer_dashboard():
                 'userName': row[6]
             }
             products.append(product)
-
+        print('products', products)
         return render_template('customer.html', products=products)
     else:
         return 'Access denied. You are not a customer.'
