@@ -144,7 +144,7 @@ def customer_dashboard():
 def supplier_dashboard():
     if current_user.is_authenticated and current_user.userType == "Supplier":
         cur = mysql.cursor()
-        cur.execute('''SELECT * FROM Product WHERE userID = %s''', (userID,))
+        cur.execute('''SELECT * FROM Product WHERE userID = %s''', (session['userID'],))
         results  = cur.fetchall()
         products = []
         for row in results :
