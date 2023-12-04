@@ -119,8 +119,8 @@
                 <div class="product-price">${{ product['Price'] }}</div>
                 <div class="product-description">{{ product['ProductDescription'] }}</div>
                 <div class="edit-delete-buttons">
-                    <button onclick="toggleEditForm(product['ID'])">Edit</button>
-                    <button onclick="deleteProduct(product['ID'])">Delete</button>
+                    <button onclick="toggleEditForm(`{{ product['ID'] }}`)">Edit</button>
+                    <button onclick="deleteProduct(`{{ product['ID'] }}`)">Delete</button>
                 </div>
             </div>
             <form id="editForm{{ product['ID'] }}" style="display: none;">
@@ -226,8 +226,7 @@
             const price = document.getElementById('addProductPrice').value;
             const rating = document.getElementById('addProductRating').value;
             const productDescription = document.getElementById('addProductDescription').value;
-            print('Session:',"{{session['userName']}}");
-            const userID = session['userID'];
+            const userID = "{{session['userID']}}";
 
             // Call the Python API to add the product
             fetch('/add_product', {
@@ -238,7 +237,9 @@
                 body: JSON.stringify({
                     productName,
                     price,
+                    rating,
                     productDescription,
+                    userID
                 }),
             })
             .then(response => {
