@@ -221,8 +221,10 @@ def add_product():
 @app.route('/update_product/<int:product_id>', methods=['GET','PUT'])
 def update_product(product_id):
     try:
+        print('request.method = ',request.method)
         if request.method == 'PUT':
             data = request.get_json()
+            print(data)
             productName = data.get('new_product_name')
             price = data.get('new_price')
             rating = data.get('new_rating')
