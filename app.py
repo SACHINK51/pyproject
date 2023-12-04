@@ -219,7 +219,7 @@ def add_product():
             cursor.execute(insert_query, (ProductName, price, ProductDescription))
             mysql.commit()
 
-        return redirect(url_for('supplier_dashboard'))
+        return '{"Result":"Success"}'
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
