@@ -237,7 +237,7 @@ def update_product(product_id):
             # Update product in the Product table
             update_query = '''
                 UPDATE Product
-                SET productName = %s, price = %s, rating = %s productDescription = %s
+                SET productName = %s, price = %s, rating = %s, productDescription = %s
                 WHERE productID = %s;
             '''
             print('update_query',update_query)
