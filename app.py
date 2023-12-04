@@ -40,7 +40,7 @@ bcrypt = Bcrypt(app)
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        username = request.form['username']
+        username = request.form['userName']
         user_type = request.form['userType']
         password = request.form['password']
 
