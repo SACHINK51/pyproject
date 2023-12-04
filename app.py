@@ -77,8 +77,7 @@ def login():
         print("User Type:", user_type)
         print("User:", user)
         stored_password = str(user[3])  # Assuming the hashed password is stored as an integer
-        stored_password_bytes = stored_password.encode('utf-8')
-        if user and bcrypt.check_password_hash(stored_password_bytes, password):
+        if user and bcrypt.check_password_hash(stored_password, password):
             # Set user information in the session
             session['user_id'] = user[0]
             session['username'] = user[1]
