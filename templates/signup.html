@@ -85,13 +85,15 @@
 
 </form>
 <script>
-        {% if signup_alert %}
-            alert("Signup Successful!! Please Login");
-            setTimeout(function() {
-                window.location.href = "{{ url_for('login') }}";  // Redirect to login page after a delay
-            }, 3000);  // 3000 milliseconds (3 seconds) delay
-        {% endif %}
-    </script>
+    var signupAlert = "{{ signup_alert }}"; // Use a JavaScript variable
+
+    if (signupAlert) {
+        alert(signupAlert);
+        setTimeout(function() {
+            window.location.href = "{{ url_for('login') }}";  // Redirect to login page after a delay
+        }, 3000);  // 3000 milliseconds (3 seconds) delay
+    }
+</script>
 
 </body>
    
