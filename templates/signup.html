@@ -87,9 +87,9 @@
 <script>
         {% if signup_alert %}
             alert("{{ signup_alert }}");
-            // setTimeout(function() {
-            //     window.location.href = "{{ url_for('login') }}";  // Redirect to login page after a delay
-            // }, 3000);  // 3000 milliseconds (3 seconds) delay
+            setTimeout(function() {
+                window.location.href = "{{ url_for('login') }}";  // Redirect to login page after a delay
+            }, 3000);  // 3000 milliseconds (3 seconds) delay
         {% endif %}
     </script>
 
