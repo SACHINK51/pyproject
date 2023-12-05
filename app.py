@@ -126,11 +126,8 @@ def login():
 def customer_dashboard():
     if current_user.is_authenticated and current_user.userType == "Customer":
          sort_column = request.args.get('sort', 'ProductName')  # Default to 'ProductName' if not provided
-
-        cur = mysql.cursor()
-
-        # Use parameterized query to prevent SQL injection
-        cur.execute(f'''
+         cur = mysql.cursor()
+	 cur.execute(f'''
             SELECT p.*, u.userName
             FROM Product p
             JOIN User u ON p.userID = u.userID
