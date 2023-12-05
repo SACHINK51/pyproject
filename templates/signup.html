@@ -45,6 +45,19 @@
             border-radius: 3px;
             cursor: pointer;
         }
+        .flash-message {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .flash-message.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
     </style>
 </head>
 <body>
@@ -70,6 +83,15 @@
  <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
 
 </form>
+     {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash-message {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 
 </body>
    
