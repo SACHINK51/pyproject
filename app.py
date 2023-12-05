@@ -84,8 +84,6 @@ def signup():
         mysql.commit()
         signup_alert = True
 
-        return render_template('login.html', signup_alert=True)
-
     return render_template('signup.html')
 	
 @app.route('/login', methods=['GET', 'POST'])
