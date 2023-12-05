@@ -82,7 +82,9 @@ def signup():
         cursor = mysql.cursor(); #create a connection to the SQL instance
         cursor.execute(insert_query, (userName, userType, hashed_password))
         mysql.commit()
-        signup_alert = True
+        flash("Signup successful! Please login.", "success")
+
+        return redirect(url_for('login'))
 
     return render_template('signup.html')
 	
