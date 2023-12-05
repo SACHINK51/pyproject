@@ -61,10 +61,10 @@
 </form>
 
 </body>
-
+     {% if signup_alert %}
      <script>
-        {% if signup_alert %}
+          console.log("Alert: Signup successful! Please login."); 
             alert("Signup successful! Please login.");
-        {% endif %}
     </script>
+      {% endif %}
 </html>
