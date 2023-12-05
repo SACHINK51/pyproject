@@ -4,6 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signup Page</title>
+
+     {% if signup_alert %}
+        <script>
+            console.log("Alert: Signup successful! Please login.");  // Log to console for debugging
+            alert("Signup successful! Please wait a moment.");
+            setTimeout(function() {
+                window.location.href = "{{ url_for('login') }}";  // Redirect to login page after a delay
+            }, 3000);  // 3000 milliseconds (3 seconds) delay
+        </script>
+    {% endif %}
+    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -61,10 +72,5 @@
 </form>
 
 </body>
-     {% if signup_alert %}
-     <script>
-          console.log("Alert: Signup successful! Please login."); 
-            alert("Signup successful! Please login.");
-    </script>
-      {% endif %}
+   
 </html>
