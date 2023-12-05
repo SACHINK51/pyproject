@@ -84,11 +84,14 @@
     {% endwith %} -->
 
 </form>
-{% if signup_alert %}
-        <script>
-            alert("Signup successful! Please wait a moment.");
-        </script>
-    {% endif %}  
+<script>
+        {% if signup_alert %}
+            alert("{{ signup_alert }}");
+            setTimeout(function() {
+                window.location.href = "{{ url_for('login') }}";  // Redirect to login page after a delay
+            }, 3000);  // 3000 milliseconds (3 seconds) delay
+        {% endif %}
+    </script>
 
 </body>
    
