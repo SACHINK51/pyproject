@@ -106,6 +106,13 @@
         <input type="text" id="searchInput" placeholder="Search...">
         <button type="button" onclick="searchMethod()">Search</button>
     </div>
+     <div class="sort-dropdown">
+            <label for="sort">Sort by:</label>
+            <select id="sort" onchange="sortMethod()">
+                <option value="price">Price (Low to High)</option>
+                <option value="product_name">Product Name (A to Z)</option>
+            </select>
+        </div>
     <div class="product-container">
         {% for product in products %}
             <div class="product-card">
@@ -132,6 +139,13 @@
                     window.location.href = `/search_results?term=${searchTerm}`;
                 }
             });
+        }
+
+     
+        function sortMethod() {
+            const sortOption = document.getElementById('sort').value;
+            const url = `/customer_dashboard?sort=${sortOption}`;
+            window.location.href = url;
         }
     </script>
 </body>
