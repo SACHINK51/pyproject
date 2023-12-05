@@ -132,7 +132,7 @@ def customer_dashboard():
         elif sort_option == 'product_name':
             sort_column = 'ProductName'
         cur = mysql.cursor()
-        cur.execute('''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID''')
+        cur.execute('''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID ORDER BY {sort_column} ASC''')
         results  = cur.fetchall()
         products = []
         for row in results :
