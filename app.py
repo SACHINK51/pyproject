@@ -130,7 +130,7 @@ def customer_dashboard():
          cur.execute(f'''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID ORDER BY {sort_column} ASC''')
          results  = cur.fetchall()
          products = []
-        for row in results :
+         for row in results :
             product = {
                 'productID': row[0],
                 'ProductName': row[1],
