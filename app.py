@@ -126,10 +126,10 @@ def login():
 def customer_dashboard():
     if current_user.is_authenticated and current_user.userType == "Customer":
          sort_option = request.args.get('sort', default='price')
-            if sort_option == 'price':
-              sort_column = 'Price'
-            elif sort_option == 'product_name':
-              sort_column = 'ProductName'
+         if sort_option == 'price':
+           sort_column = 'Price'
+         elif sort_option == 'product_name':
+           sort_column = 'ProductName'
          cur = mysql.cursor()
          cur.execute(f'''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID ORDER BY {sort_column}''')
   
