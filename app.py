@@ -65,6 +65,7 @@ def query_user_by_id(userID):
     
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    signup_alert = False
     if request.method == 'POST':
         userName = request.form['userName']
         userType = request.form['userType']
@@ -81,6 +82,7 @@ def signup():
         cursor = mysql.cursor(); #create a connection to the SQL instance
         cursor.execute(insert_query, (userName, userType, hashed_password))
         mysql.commit()
+        signup_alert = True
 
         return render_template('login.html', signup_alert=True)
 
