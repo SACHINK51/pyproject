@@ -72,9 +72,8 @@
     
 <!-- to login -->
  <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
-
-</form>
-     {% with messages = get_flashed_messages(with_categories=true) %}
+<br>
+       {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, message in messages %}
                 <div class="flash-message {{ category }}">
@@ -83,6 +82,16 @@
             {% endfor %}
         {% endif %}
     {% endwith %}
+
+</form>
+{% if signup_alert %}
+        <script>
+            alert("Signup successful! Please wait a moment.");
+            setTimeout(function() {
+                window.location.href = "{{ url_for('login') }}";  // Redirect to login page after a delay
+            }, 3000);  // 3000 milliseconds (3 seconds) delay
+        </script>
+    {% endif %}  
 
 </body>
    
