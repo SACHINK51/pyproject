@@ -87,9 +87,6 @@
 {% if signup_alert %}
         <script>
             alert("Signup successful! Please wait a moment.");
-            setTimeout(function() {
-                window.location.href = "{{ url_for('login') }}"; 
-            }, 2000);  
         </script>
     {% endif %}  
 
