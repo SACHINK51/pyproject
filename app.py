@@ -65,7 +65,7 @@ def query_user_by_id(userID):
     
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    signup_alert = False
+    signup_alert = None
     if request.method == 'POST':
         userName = request.form['userName']
         userType = request.form['userType']
@@ -83,8 +83,8 @@ def signup():
         cursor.execute(insert_query, (userName, userType, hashed_password))
         mysql.commit()
         flash("Signup successful! Please login.", "success")
-
-        return render_template('login.html', signup_alert=True)
+        signup_alert = "Signup successful! Please wait a moment."
+	return render_template('signup.html', signup_alert=signup_alert)
 
     return render_template('signup.html')
 	
