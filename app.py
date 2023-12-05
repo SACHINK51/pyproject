@@ -128,7 +128,7 @@ def customer_dashboard():
          sort_option = request.args.get('sort', default=None)
          if sort_option == 'price':
            sort_column = 'Price'
-         elif sort_option == 'product_name':
+         elif sort_option == 'productName':
            sort_column = 'ProductName'
          cur = mysql.cursor()
          cur.execute(f'''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID ORDER BY {sort_column}''')
