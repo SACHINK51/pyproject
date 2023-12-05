@@ -83,7 +83,7 @@ def signup():
         cursor.execute(insert_query, (userName, userType, hashed_password))
         mysql.commit()
         flash("Signup successful! Please login.", "success")
-        return render_template('login.html', signup_alert= True)
+        signup_alert= True
 
     return render_template('signup.html')
 	
