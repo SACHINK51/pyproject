@@ -84,7 +84,7 @@ def signup():
         mysql.commit()
         flash("Signup successful! Please login.", "success")
         signup_alert = "Signup successful! Please wait a moment."
-	return render_template('signup.html', signup_alert=signup_alert)
+        return render_template('signup.html', signup_alert=signup_alert)
 
     return render_template('signup.html')
 	
