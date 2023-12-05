@@ -125,6 +125,14 @@ def login():
 @login_required
 def customer_dashboard():
     if current_user.is_authenticated and current_user.userType == "Customer":
+        sort_option = request.args.get('sort', default='price')  # Default sorting by price
+
+        if sort_option == 'price':
+            sort_column = 'Price'
+        elif sort_option == 'product_name':
+            sort_column = 'ProductName'
+        else:
+            sort_column = 'Price'  # Default to price if an invalid option is provided
         cur = mysql.cursor()
         cur.execute('''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID''')
         results  = cur.fetchall()
