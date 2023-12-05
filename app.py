@@ -173,7 +173,7 @@ def supplier_dashboard():
         print('products', products)
         return render_template('supplier.html', products=products)
     else:
-        return 'Access denied. You are not a customer.'
+        return 'Access denied. You are not a Supplier.'
 
 
 @app.route('/logout', methods=['POST'])
