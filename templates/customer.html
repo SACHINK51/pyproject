@@ -19,7 +19,7 @@
             text-align: center;
         }
 
-        .product-container {
+        .product-container, #productCardsContainer {
             display: flex;
             flex-wrap: wrap;
             justify-content: flex-start; 
@@ -91,6 +91,10 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
+	.displayNone{
+	    display:none;
+	}
     </style>
 </head>
 <body>
@@ -106,6 +110,7 @@
         <input type="text" id="searchInput" placeholder="Search...">
         <button type="button" onclick="searchMethod()">Search</button>
     </div>
+    <div id="productCardsContainer"></div>
     <div class="product-container">
         {% for product in products %}
             <div class="product-card">
@@ -119,6 +124,27 @@
     <script>
         function searchMethod() {
             const searchTerm = document.getElementById('searchInput').value;
+	    if(searchTerm=="") {
+		console.log('Search term is empty. Please enter a valid search term');
+		displaySearchResults(searchTerm);
+		return;	    
+	    }
+	    fetch(`/search/${encodeURIComponent(searchTerm)}`, {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	    }).then(response => {
+			if (!response.ok) {
+				throw new Error(`HTTP error! Status: ${response.status}`);
+			}
+		return response.json();
+	    }).then(data => {
+		displaySearchResults(data);
+	    })
+	    .catch(error => {
+	        console.error('Error:', error);
+	    });
             
             // Make a request to the Python API for searching
             fetch(`/search_product?term=${searchTerm}`, {
