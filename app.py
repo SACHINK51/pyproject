@@ -264,6 +264,22 @@ def delete_product(product_id):
 
         except Exception as e:
             return jsonify({'error': str(e)}), 500
-        
+
+@app.route('/search/<search_term>')
+@login_required
+def search_product(search_term):
+    if current_user.is_authenticated and current_user.userType == "Customer":
+        cursor = mysql.cursor()
+        query = '''
+        SELECT p.*, u.userName
+        FROM Product p
+        JOIN User u ON p.userID = u.userID
+        WHERE p.productName LIKE %s
+            OR p.productDescription LIKE %s
+        '''
+        cursor.execute(query, ('%'+ search_term + '%' + search_term + '%'))
+        results = cursor.fetchall()
+        products = []
+                
 if __name__ == "__main__":
   app.run(host='0.0.0.0',port='8080', ssl_context=('cert.pem', 'privkey.pem')) #Run the flask app at port 8080
