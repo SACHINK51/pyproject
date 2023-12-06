@@ -145,20 +145,32 @@
 	    .catch(error => {
 	        console.error('Error:', error);
 	    });
-            
-            // Make a request to the Python API for searching
-            fetch(`/search_product?term=${searchTerm}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-            .then(response => {
-                if (response.status === 200) {
-                    window.location.href = `/search_results?term=${searchTerm}`;
-                }
-            });
-        }
+
+	function displaySearchResults(results) {
+	
+	    console.log('results', results) {
+	    if (document.getElementById(productCardsContainer).innerHTML!=null) {
+	    	document.getElementById('productCardsContainer').innerHTML = '';
+	    }
+	    if(results!='') {
+		document.querySelector('.product-container').classList.add('displayNone');
+		if (results && results.length > 0) {
+			results.forEach(product => {
+			var el = `<div class="product-card">
+					<div class="product-name">${product.ProductName}</div>
+					<div class="product-price">${product.Price}</div>`)
+					<div class="product-description">${product.ProductDescription}</div>
+					<div class="user-name">Supplier: ${product.userName}</div>
+				</div>`
+			document.getElementById('productCardsContainer').innerHTML += el;
+		   });
+		} else {
+		   document.getElementById('productCardsContainer').textContent = 'No products found.';
+		}
+	    } else {
+		document.querySelector('.product-container').classList.remove('displayNone')
+	    }
+	}
     </script>
 </body>
 </html>
