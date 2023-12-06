@@ -125,7 +125,7 @@
         function searchMethod() {
             const searchTerm = document.getElementById('searchInput').value;
 	    if(searchTerm=="") {
-		console.log('Search term is empty. Please enter a valid search term');
+		console.log('Search term is empty. Please enter a valid search term.');
 		displaySearchResults(searchTerm);
 		return;	    
 	    }
@@ -145,20 +145,21 @@
 	    .catch(error => {
 	        console.error('Error:', error);
 	    });
-
+	}
 	function displaySearchResults(results) {
 	
-	    console.log('results', results) {
-	    if (document.getElementById(productCardsContainer).innerHTML!=null) {
+	    console.log('results', results)
+	    if (document.getElementById('productCardsContainer').innerHTML!=null) {
 	    	document.getElementById('productCardsContainer').innerHTML = '';
 	    }
 	    if(results!='') {
 		document.querySelector('.product-container').classList.add('displayNone');
 		if (results && results.length > 0) {
 			results.forEach(product => {
-			var el = `<div class="product-card">
+				console.log(product)
+				var el = `<div class="product-card">
 					<div class="product-name">${product.ProductName}</div>
-					<div class="product-price">${product.Price}</div>`)
+					<div class="product-price">${product.Price}</div>
 					<div class="product-description">${product.ProductDescription}</div>
 					<div class="user-name">Supplier: ${product.userName}</div>
 				</div>`
