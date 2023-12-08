@@ -91,45 +91,7 @@
             border-radius: 5px;
             cursor: pointer;
         }
-          .custom-dropdown {
-        display: inline-block;
-        position: relative;
-    }
-
-    .custom-dropdown button {
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        padding: 8px 16px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    .custom-dropdown ul {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        position: absolute;
-        background-color: #f9f9f9;
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        border-radius: 5px;
-        display: none;
-        z-index: 1;
-    }
-
-    .custom-dropdown li {
-        padding: 8px 16px;
-        cursor: pointer;
-    }
-
-    .custom-dropdown li:hover {
-        background-color: #ddd;
-    }
-
-    .custom-dropdown.show ul {
-        display: block;
-    }
-      
+        
     </style>
 </head>
 <body>
@@ -146,7 +108,6 @@
         <button type="button" onclick="searchMethod()">Search</button>
     </div>
    <div class="custom-dropdown">
-    <button onclick="toggleDropdown()">Sort by</button>
     <ul id="dropdownList">
         <li onclick="sortMethod('price')">Price (Low to High)</li>
         <li onclick="sortMethod('productName')">Product Name (A to Z)</li>
@@ -181,26 +142,9 @@
             });
         }
 
-        
-         function toggleDropdown() {
-        const dropdownList = document.getElementById('dropdownList');
-        dropdownList.classList.toggle('show');
-    }
 
     function sortMethod(option) {
         window.location.href = `/customer_dashboard?sort=${option}`;
-    }
-
-    window.onclick = function (event) {
-        if (!event.target.matches('.custom-dropdown button')) {
-            const dropdowns = document.getElementsByClassName('dropdown-content');
-            for (let i = 0; i < dropdowns.length; i++) {
-                const openDropdown = dropdowns[i];
-                if (openDropdown.classList.contains('show')) {
-                    openDropdown.classList.remove('show');
-                }
-            }
-        }
     }
     </script>
 </body>
