@@ -180,7 +180,11 @@
             });
         }
 
-     
+      function toggleDropdown() {
+        const dropdownList = document.getElementById('dropdownList');
+        dropdownList.classList.toggle('show');
+    }
+        
         function sortMethod(option) {
         window.location.href = `/customer_dashboard?sort=${option}`;
     }
