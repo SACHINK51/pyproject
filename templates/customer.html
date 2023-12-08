@@ -91,6 +91,44 @@
             border-radius: 5px;
             cursor: pointer;
         }
+         .custom-dropdown {
+        display: inline-block;
+        position: relative;
+    }
+
+    .custom-dropdown button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .custom-dropdown ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        position: absolute;
+        background-color: #f9f9f9;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+        display: none;
+        z-index: 1;
+    }
+
+    .custom-dropdown li {
+        padding: 8px 16px;
+        cursor: pointer;
+    }
+
+    .custom-dropdown li:hover {
+        background-color: #ddd;
+    }
+
+    .custom-dropdown.show ul {
+        display: block;
+    }
     </style>
 </head>
 <body>
@@ -106,12 +144,14 @@
         <input type="text" id="searchInput" placeholder="Search...">
         <button type="button" onclick="searchMethod()">Search</button>
     </div>
-     <div class="sort-dropdown">
-             <ul id="dropdownList">
-                <li onclick="sortMethod('price')">Price (Low to High)</li>
-                <li onclick="sortMethod('productName')">Product Name (A to Z)</li>
-            </ul>
-        </div>
+    <div class="custom-dropdown">
+    <button onclick="toggleDropdown()">Sort by</button>
+    <ul id="dropdownList">
+        <li onclick="sortMethod('price')">Price (Low to High)</li>
+        <li onclick="sortMethod('productName')">Product Name (A to Z)</li>
+        <!-- Add more sorting options as needed -->
+    </ul>
+</div>
     <div class="product-container">
         {% for product in products %}
             <div class="product-card">
