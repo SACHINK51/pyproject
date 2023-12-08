@@ -133,7 +133,7 @@ def customer_dashboard():
          elif sort_option == 'productName':
            sort_column = 'ProductName'
          
-         if sort_column is not None:
+         if sort_column is None:
              cur = mysql.cursor()
              cur.execute(f'''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID ORDER BY {sort_column}''')
   
