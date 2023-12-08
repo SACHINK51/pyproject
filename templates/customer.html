@@ -141,11 +141,9 @@
         }
 
      
-        function sortMethod() {
-            const sortOption = document.getElementById('sort').value;
-            const url = `/customer_dashboard?sort=${sortOption}`;
-            window.location.href = url;
-        }
+        function sortMethod(option) {
+        window.location.href = `/customer_dashboard?sort=${option}`;
+    }
     </script>
 </body>
 </html>
