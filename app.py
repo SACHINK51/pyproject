@@ -282,7 +282,7 @@ def filter_method(filter_value):
             filterQuery='''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID orderBy rating DESC'''
         else:
             filterQuery='''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID'''
-        cur.execute(filterQuery);
+        cursor.execute(filterQuery);
         results = cursor.fetchall()
         products = []
         for row in results :
