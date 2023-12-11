@@ -156,8 +156,6 @@ def customer_dashboard():
 
         print('products', products)
         return render_template('customer.html', products=products)
-        else:
-            return 'Invalid sort option.'
     else:
         return 'Access denied. You are not a customer.'
 
