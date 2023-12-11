@@ -42,6 +42,21 @@
             font-size: 1.2em;
             font-weight: bold;
             margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .product-name-span{
+            padding: 5px;
+            flex-grow: 1;
+        }
+
+        .product-rating{
+            background-color: #ff0606;
+            padding: 6px;
+            color: #fff;
+            border-radius: 5px;
+            font-size: small;
         }
 
         .product-price {
@@ -134,7 +149,7 @@
     <div class="product-container">
         {% for product in products %}
             <div class="product-card">
-                <div class="product-name">{{ product['ProductName'] }}</div>
+                <div class="product-name"><span class="product-name-span">{{ product['ProductName'] }}</span> <span class="product-rating">{{ product['Rating'] }} ★</span></div>
                 <div class="product-price">${{ product['Price'] }}</div>
                 <div class="product-description">{{ product['ProductDescription'] }}</div>
                 <div class="user-name">Supplier: {{ product['userName'] }}</div>
