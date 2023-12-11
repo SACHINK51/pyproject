@@ -276,11 +276,11 @@ def filter_method(filter_value):
             filterQuery='''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID orderBy price'''
         elif(filter_value == "priceHTL"):
             filterQuery='''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID orderBy price DESC'''
-            elif(filter_value == "ratingLTH"):
+        elif(filter_value == "ratingLTH"):
             filterQuery='''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID orderBy rating'''
-            elif(filter_value == "ratingHTL"):
+        elif(filter_value == "ratingHTL"):
             filterQuery='''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID orderBy rating DESC'''
-            else:
+        else:
             filterQuery='''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID'''
         cur.execute(filterQuery);
         results = cursor.fetchall()
