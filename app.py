@@ -273,7 +273,7 @@ def search_method(search_term):
         WHERE p.productName LIKE %s
             OR p.productDescription LIKE %s
         '''
-        cursor.execute(query, ('%'+ search_term + '%' + search_term + '%'))
+        cursor.execute(query, ('%'+ search_term + '%', '%' + search_term + '%'))
         results = cursor.fetchall()
         products = []
         for row in results :
