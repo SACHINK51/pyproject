@@ -125,25 +125,11 @@ def login():
 @login_required
 def customer_dashboard():
     if current_user.is_authenticated and current_user.userType == "Customer":
-        sort_option = request.args.get('sort', default=None)
-
-        if sort_option == 'price':
-            sort_column = 'Price'
-        elif sort_option == 'productName':
-            sort_column = 'ProductName'
-        else:
-            sort_column = 'ProductID'  # Default sorting by ProductID if no valid sort option is provided
         cur = mysql.cursor()
-        if sort_column is not None:
-            cur.execute(f'''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID ORDER BY {sort_column}''')
-        else:
-            cur.execute(f'''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID''')
-
-        results = cur.fetchall()
-        print('results:', results)
+        cur.execute('''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID''')
+        results  = cur.fetchall()
         products = []
-
-        for row in results:
+        for row in results :
             product = {
                 'productID': row[0],
                 'ProductName': row[1],
@@ -153,14 +139,11 @@ def customer_dashboard():
                 'userName': row[6]
             }
             products.append(product)
-
         print('products', products)
         return render_template('customer.html', products=products)
     else:
         return 'Access denied. You are not a customer.'
-
-
-	    
+     
 @app.route("/supplier_dashboard")
 @login_required
 def supplier_dashboard():
