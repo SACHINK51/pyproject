@@ -124,19 +124,17 @@
         <option value="ratingLTH">rating(Low to High)</option>
         <option value="ratingHTL">rating(High to low)</option>
     </select>
-    <div id="productCardsContainer">
-        <div class="product-container">
-            {% for product in products %}
-                <div class="product-card">
-                    <div class="product-name">{{ product['ProductName'] }}</div>
-                    <div class="product-price">${{ product['Price'] }}</div>
-                    <div class="product-description">{{ product['ProductDescription'] }}</div>
-                    <div class="user-name">Supplier: {{ product['userName'] }}</div>
-                </div>
-            {% endfor %}
-        </div>
+    <div id="productCardsContainer"></div>
+    <div class="product-container">
+        {% for product in products %}
+            <div class="product-card">
+                <div class="product-name">{{ product['ProductName'] }}</div>
+                <div class="product-price">${{ product['Price'] }}</div>
+                <div class="product-description">{{ product['ProductDescription'] }}</div>
+                <div class="user-name">Supplier: {{ product['userName'] }}</div>
+            </div>
+        {% endfor %}
     </div>
-    
     <script>
         function searchMethod() {
             const searchTerm = document.getElementById('searchInput').value;
@@ -198,7 +196,7 @@
 	    }
 	    if(results!='') {
             console.log('results are not empty', results)
-            document.querySelector('.product-container').classList.add('displayNone');
+            document.querySelector('#productCardsContainer').classList.add('displayNone');
             if (results && results.length > 0) {
                 results.forEach(product => {
                     console.log(product)
@@ -216,7 +214,7 @@
         } else {
             console.log('results are empty', results)
             document.getElementById('productCardsContainer').textContent = 'No products found.';
-            document.querySelector('.product-container').classList.add('displayNone');
+            document.querySelector('#productCardsContainer').classList.add('displayNone');
 	    }
 	}
     </script>
