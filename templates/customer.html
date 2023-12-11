@@ -107,6 +107,12 @@
         <input type="text" id="searchInput" placeholder="Search...">
         <button type="button" onclick="searchMethod()">Search</button>
     </div>
+    <label for="filterBox">Filter : </label>
+    <select id="filterBox" name="userType" onchange=sortMethod(this)>
+        <option value="productID">popularity</option>
+        <option value="price">price</option>
+        <option value="rating">rating</option>
+    </select>
     <div class="product-container">
         {% for product in products %}
             <div class="product-card">
@@ -133,6 +139,9 @@
                     window.location.href = `/search_results?term=${searchTerm}`;
                 }
             });
+        }
+        function sortMethod(select){
+            console.log(select.options[select.selectedIndex].getValue());
         }
     </script>
 </body>
