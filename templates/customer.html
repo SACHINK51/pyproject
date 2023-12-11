@@ -126,7 +126,7 @@
             const searchTerm = document.getElementById('searchInput').value;
 	    if(searchTerm=="") {
 		console.log('Search term is empty. Please enter a valid search term.');
-		displaySearchResults(searchTerm);
+		document.querySelector('.product-container').classList.remove('displayNone');
 		return;	    
 	    }
 	    fetch(`/search/${encodeURIComponent(searchTerm)}`, {
@@ -170,7 +170,9 @@
             document.getElementById('productCardsContainer').textContent = 'No products found.';
             }
         } else {
-            document.querySelector('.product-container').classList.remove('displayNone')
+            console.log('results are empty', results)
+            document.getElementById('productCardsContainer').textContent = 'No products found.';
+            document.querySelector('.product-container').classList.add('displayNone');
 	    }
 	}
     </script>
