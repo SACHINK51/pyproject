@@ -73,41 +73,54 @@
     <div class="product-container">
         {% for product in products %}
         <form class="formHead" id="updateForm{{product['productID']}}">
-            <input type="text" id="productName{{product['productID']}}" name="productName" placeholder="Product Name" value="{{ product['ProductName'] }}" required>
-            <input type="number" id="productPrice{{product['productID']}}" name="price" placeholder="Price" value="{{ product['Price'] }}" required>
-            <input type="number" id="productRating{{product['productID']}}" name="rating" placeholder="rating" value="{{ product['Rating'] }}" required>
-            <input type="text" id="productDescription{{product['productID']}}" name="productDescription" placeholder="Product Description" value="{{ product['ProductDescription'] }}" required>
-            <button type="button" name="submit" onclick="updateMethod('{{ product.productID }}')">update</button>
+            <input type="text" id="productName{{product['productID']}}" name="productName" placeholder="Product Name" value="{{ product['ProductName'] }}" required readonly>
+            <input type="number" id="productPrice{{product['productID']}}" name="price" placeholder="Price" value="{{ product['Price'] }}" required readonly>
+            <input type="number" id="productRating{{product['productID']}}" name="rating" placeholder="rating" value="{{ product['Rating'] }}" required readonly>
+            <input type="text" id="productDescription{{product['productID']}}" name="productDescription" placeholder="Product Description" value="{{ product['ProductDescription'] }}" required readonly>
+            <button type="button" id="updateButton{{product['productID']}}" name="submit" onclick="updateMethod('{{ product.productID }}')">edit</button>
             <button type="button" name="submit" onclick="deleteMethod('{{ product.productID }}')">delete</button>
         </form>
         {% endfor %}
     </div>
     <script>
         function updateMethod(productID){
-            const updatedProductName = document.getElementById(`productName${productID}`).value;
-            const updatedProductPrice = document.getElementById(`productPrice${productID}`).value;
-            const updatedProductRating = document.getElementById(`productRating${productID}`).value;
-            const updatedProductDescription = document.getElementById(`productDescription${productID}`).value;
+            if(document.getElementById(`updateButton${productID}`).innerText=='update'){
+                document.getElementById(`productName${productID}`).setAttribute("readonly","readonly");
+                document.getElementById(`productPrice${productID}`).setAttribute("readonly","readonly");
+                document.getElementById(`productRating${productID}`).setAttribute("readonly","readonly");
+                document.getElementById(`productDescription${productID}`).setAttribute("readonly","readonly");
+                const updatedProductName = document.getElementById(`productName${productID}`).value;
+                const updatedProductPrice = document.getElementById(`productPrice${productID}`).value;
+                const updatedProductRating = document.getElementById(`productRating${productID}`).value;
+                const updatedProductDescription = document.getElementById(`productDescription${productID}`).value;
 
-            // Make a request to the Python API for updating the product
-            fetch(`/update_product/${productID}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    new_product_name: updatedProductName,
-                    new_price: updatedProductPrice,
-                    new_rating: updatedProductRating,
-                    new_product_description: updatedProductDescription,
-                }),
-            })
-            .then(response => {
-                if(response.status==200){
-                window.location.reload()
-               }
-            });
-            alert("Product has been updated")
+                // Make a request to the Python API for updating the product
+                fetch(`/update_product/${productID}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        new_product_name: updatedProductName,
+                        new_price: updatedProductPrice,
+                        new_rating: updatedProductRating,
+                        new_product_description: updatedProductDescription,
+                    }),
+                })
+                .then(response => {
+                    if(response.status==200){
+                    window.location.reload()
+                }
+                });
+                document.getElementById(`updateButton${productID}`).innerText='edit';
+            }
+            else{
+                document.getElementById(`updateButton${productID}`).innerText='update'
+                document.getElementById(`productName${productID}`).removeAttribute("readonly");
+                document.getElementById(`productPrice${productID}`).removeAttribute("readonly");
+                document.getElementById(`productRating${productID}`).removeAttribute("readonly");
+                document.getElementById(`productDescription${productID}`).removeAttribute("readonly");
+            }
         }
         function deleteMethod(productID){
             fetch(`/delete_product/${productID}`, {
