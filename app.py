@@ -137,25 +137,27 @@ def customer_dashboard():
         if sort_column is not None:
             cur = mysql.cursor()
             cur.execute(f'''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID ORDER BY {sort_column}''')
+        else:
+            cur = mysql.cursor()
+            cur.execute('''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID''')
+        
+        results = cur.fetchall()
+        products = []
 
-            results = cur.fetchall()
-            products = []
-
-            for row in results:
-                product = {
-                    'productID': row[0],
-                    'ProductName': row[1],
-                    'Price': row[2],
-                    'Rating': row[3],
-                    'ProductDescription': row[4],
-                    'userName': row[6]
-                }
-                products.append(product)
+        for row in results:
+            product = {
+                'productID': row[0],
+                'ProductName': row[1],
+                'Price': row[2],
+                'Rating': row[3],
+                'ProductDescription': row[4],
+                'userName': row[6]
+            }
+            products.append(product)
 
             print('products', products)
             return render_template('customer.html', products=products)
-        else:
-            return 'Invalid sort option.'
+        
     else:
         return 'Access denied. You are not a customer.'
 
