@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, login_required, UserMixin, login_user, logout_user, current_user
 import mysql.connector
@@ -65,6 +65,7 @@ def query_user_by_id(userID):
     
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    signup_alert = None
     if request.method == 'POST':
         userName = request.form['userName']
         userType = request.form['userType']
@@ -81,8 +82,9 @@ def signup():
         cursor = mysql.cursor(); #create a connection to the SQL instance
         cursor.execute(insert_query, (userName, userType, hashed_password))
         mysql.commit()
-
-        return 'Signup successful!'
+        flash("Signup successful! Please login.", "success")
+        signup_alert = "Signup successful! Please wait a moment."
+        return render_template('signup.html', signup_alert=signup_alert)
 
     return render_template('signup.html')
 	
@@ -137,7 +139,7 @@ def customer_dashboard():
         return render_template('customer.html', products=products)
     else:
         return 'Access denied. You are not a customer.'
-    
+     
 @app.route("/supplier_dashboard")
 @login_required
 def supplier_dashboard():
@@ -159,7 +161,7 @@ def supplier_dashboard():
         print('products', products)
         return render_template('supplier.html', products=products)
     else:
-        return 'Access denied. You are not a customer.'
+        return 'Access denied. You are not a Supplier.'
 
 
 @app.route('/logout', methods=['POST'])
@@ -260,6 +262,23 @@ def delete_product(product_id):
 
         except Exception as e:
             return jsonify({'error': str(e)}), 500
+
+@app.route('/filter/<filter_value>')
+@login_required
+def filter_method(filter_value):
+    if current_user.is_authenticated and current_user.userType == "Customer":
+        cursor = mysql.cursor()
+        if(filter_value == "priceLTH"):
+            filterQuery='''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID order By price'''
+        elif(filter_value == "priceHTL"):
+            filterQuery='''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID order By price DESC'''
+        elif(filter_value == "ratingLTH"):
+            filterQuery='''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID order By rating'''
+        elif(filter_value == "ratingHTL"):
+            filterQuery='''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID order By rating DESC'''
+        else:
+            filterQuery='''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID'''
+        cursor.execute(filterQuery);
 
 @app.route('/search/<search_term>')
 @login_required
