@@ -94,7 +94,9 @@
         }
         #labelForFilterBox{
             margin-left: 5%;
-            padding: 10px 6px 20px;
+        }
+        #filterDiv{
+            padding: 20px;
         }
         #filterBox{
             padding: 6px;
@@ -118,14 +120,16 @@
         <input type="text" id="searchInput" placeholder="Search...">
         <button type="button" onclick="searchMethod()">Search</button>
     </div>
-    <label id = "labelForFilterBox" for="filterBox">Filter : </label>
-    <select id="filterBox" name="userType" onchange=sortMethod(this)>
-        <option value="productID">popularity</option>
-        <option value="priceLTH">price(Low to High)</option>
-        <option value="priceHTL">price(High to Low)</option>
-        <option value="ratingLTH">rating(Low to High)</option>
-        <option value="ratingHTL">rating(High to low)</option>
-    </select>
+    <div id="filterDiv">
+        <label id = "labelForFilterBox" for="filterBox">Filter : </label>
+        <select id="filterBox" name="userType" onchange=sortMethod(this)>
+            <option value="productID">popularity</option>
+            <option value="priceLTH">price(Low to High)</option>
+            <option value="priceHTL">price(High to Low)</option>
+            <option value="ratingLTH">rating(Low to High)</option>
+            <option value="ratingHTL">rating(High to low)</option>
+        </select>
+    </div>
     <div id="productCardsContainer"></div>
     <div class="product-container">
         {% for product in products %}
