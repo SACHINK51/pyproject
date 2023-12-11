@@ -292,7 +292,7 @@ def filter_method(filter_value):
             }
             products.append(product)
         print('products', products)
-        return jsonify(products), 200
+        return render_template('customer.html', products=products)
     else:
         return 'Access denied. You are not a customer.'
     
