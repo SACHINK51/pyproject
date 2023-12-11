@@ -199,15 +199,15 @@
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
-            return URL('/customer_dashboard');
+            return response.json();
             })
-            // .then(data => {
-            //     console.log('data',data);
-            // displaySearchResults(data);
-            // })
-            // .catch(error => {
-            //     console.error('Error:', error);
-            // });
+            .then(data => {
+                console.log('data',data);
+            displaySearchResults(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
         }
 
 	function displaySearchResults(results) {
@@ -224,7 +224,7 @@
                     console.log(product)
                     var el = `<div class="product-card">
                         <div class="product-name"><span class="product-name-span">${product.ProductName}</span> 
-                            <span class="product-rating">`+ parseFloat(product.Rating) + `★</span></div>
+                            <span class="product-rating">`+ parseFloat(product.Rating) + ` ★</span></div>
                         <div class="product-price">${product.Price}</div>
                         <div class="product-description">${product.ProductDescription}</div>
                         <div class="user-name">Supplier: ${product.userName}</div>
