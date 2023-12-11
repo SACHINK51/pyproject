@@ -65,7 +65,7 @@
         <form class="formHead" id="addProductForm" action="/add_product" method="POST">
             <input type="text" id="addProductName" name="productName" placeholder="Product Name" required>
             <input type="number" min="1" step="any" id="addProductPrice" name="price" placeholder="Price" required>
-            <input type="number" min="0" max="5" step="any" title="Enter a valid rating between 1 and 5" id="addProductRating" name="rating" placeholder="rating" required>
+            <input type="number" min="0" max="5" step="any" id="addProductRating" name="rating" placeholder="rating" required>
             <input type="text" id="addProductDescription" name="productDescription" placeholder="Product Description" required>
             <button type="submit" name="submit">Add Product</button>
         </form>
@@ -75,7 +75,7 @@
         <form class="formHead" id="updateForm{{product['productID']}}">
             <input type="text" id="productName{{product['productID']}}" name="productName" placeholder="Product Name" value="{{ product['ProductName'] }}" required readonly>
             <input type="number" min="1" step="any" id="productPrice{{product['productID']}}" name="price" placeholder="Price" value="{{ product['Price'] }}" required readonly>
-            <input type="number" min="0" max="5" step="any" title="Enter a valid rating between 1 and 5" id="productRating{{product['productID']}}" name="rating" placeholder="rating" value="{{ product['Rating'] }}" required readonly>
+            <input type="number" min="0" max="5" step="any" id="productRating{{product['productID']}}" name="rating" placeholder="rating" value="{{ product['Rating'] }}" required readonly>
             <input type="text" id="productDescription{{product['productID']}}" name="productDescription" placeholder="Product Description" value="{{ product['ProductDescription'] }}" required readonly>
             <button type="button" id="updateButton{{product['productID']}}" name="submit" onclick="updateMethod('{{ product.productID }}')">edit</button>
             <button type="button" name="submit" onclick="deleteMethod('{{ product.productID }}')">delete</button>
