@@ -153,23 +153,23 @@
 	    	document.getElementById('productCardsContainer').innerHTML = '';
 	    }
 	    if(results!='') {
-		document.querySelector('.product-container').classList.add('displayNone');
-		if (results && results.length > 0) {
-			results.forEach(product => {
-				console.log(product)
-				var el = `<div class="product-card">
-					<div class="product-name">${product.ProductName}</div>
-					<div class="product-price">${product.Price}</div>
-					<div class="product-description">${product.ProductDescription}</div>
-					<div class="user-name">Supplier: ${product.userName}</div>
-				</div>`
-			document.getElementById('productCardsContainer').innerHTML += el;
-		   });
-		} else {
-		   document.getElementById('productCardsContainer').textContent = 'No products found.';
-		}
-	    } else {
-		document.querySelector('.product-container').classList.remove('displayNone')
+            document.querySelector('.product-container').classList.add('displayNone');
+            if (results && results.length > 0) {
+                results.forEach(product => {
+                    console.log(product)
+                    var el = `<div class="product-card">
+                        <div class="product-name">${product.ProductName}</div>
+                        <div class="product-price">${product.Price}</div>
+                        <div class="product-description">${product.ProductDescription}</div>
+                        <div class="user-name">Supplier: ${product.userName}</div>
+                    </div>`
+                document.getElementById('productCardsContainer').innerHTML += el;
+                });
+            } else {
+            document.getElementById('productCardsContainer').textContent = 'No products found.';
+            }
+        } else {
+            document.querySelector('.product-container').classList.remove('displayNone')
 	    }
 	}
     </script>
