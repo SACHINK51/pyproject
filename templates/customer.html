@@ -19,7 +19,7 @@
             text-align: center;
         }
 
-        .product-container {
+        .product-container, #productCardsContainer {
             display: flex;
             flex-wrap: wrap;
             justify-content: flex-start; 
@@ -91,11 +91,15 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
+	.displayNone{
+	    display:none;
+	}
     </style>
 </head>
 <body>
     <header>
-        <h1>Welcome, {{ session['username'] }}</h1>
+        <h1>Welcome, {{ session['userName'] }}</h1>
         <div class="logout-button">
             <form action="{{ url_for('logout') }}" method="post">
                 <button type="submit">Logout</button>
@@ -106,6 +110,7 @@
         <input type="text" id="searchInput" placeholder="Search...">
         <button type="button" onclick="searchMethod()">Search</button>
     </div>
+    <div id="productCardsContainer"></div>
     <div class="product-container">
         {% for product in products %}
             <div class="product-card">
@@ -119,20 +124,60 @@
     <script>
         function searchMethod() {
             const searchTerm = document.getElementById('searchInput').value;
-            
-            // Make a request to the Python API for searching
-            fetch(`/search_product?term=${searchTerm}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-            .then(response => {
-                if (response.status === 200) {
-                    window.location.href = `/search_results?term=${searchTerm}`;
+            if(searchTerm=="") {
+                if (document.getElementById('productCardsContainer').innerHTML!=null) {
+                    document.getElementById('productCardsContainer').innerHTML = '';
                 }
+            console.log('Search term is empty. Please enter a valid search term.');
+            document.querySelector('.product-container').classList.remove('displayNone');
+            return;	    
+            }
+            fetch(`/search/${encodeURIComponent(searchTerm)}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+            return response.json();
+            }).then(data => {
+            displaySearchResults(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
             });
         }
+	function displaySearchResults(results) {
+	
+	    console.log('results', results)
+	    if (document.getElementById('productCardsContainer').innerHTML!=null) {
+	    	document.getElementById('productCardsContainer').innerHTML = '';
+	    }
+	    if(results!='') {
+            console.log('results are not empty', results)
+            document.querySelector('.product-container').classList.add('displayNone');
+            if (results && results.length > 0) {
+                results.forEach(product => {
+                    console.log(product)
+                    var el = `<div class="product-card">
+                        <div class="product-name">${product.ProductName}</div>
+                        <div class="product-price">${product.Price}</div>
+                        <div class="product-description">${product.ProductDescription}</div>
+                        <div class="user-name">Supplier: ${product.userName}</div>
+                    </div>`
+                document.getElementById('productCardsContainer').innerHTML += el;
+                });
+            } else {
+            document.getElementById('productCardsContainer').textContent = 'No products found.';
+            }
+        } else {
+            console.log('results are empty', results)
+            document.getElementById('productCardsContainer').textContent = 'No products found.';
+            document.querySelector('.product-container').classList.add('displayNone');
+	    }
+	}
     </script>
 </body>
 </html>
