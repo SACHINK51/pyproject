@@ -124,28 +124,31 @@
     <script>
         function searchMethod() {
             const searchTerm = document.getElementById('searchInput').value;
-	    if(searchTerm=="") {
-		console.log('Search term is empty. Please enter a valid search term.');
-		document.querySelector('.product-container').classList.remove('displayNone');
-		return;	    
-	    }
-	    fetch(`/search/${encodeURIComponent(searchTerm)}`, {
-		method: 'GET',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	    }).then(response => {
-			if (!response.ok) {
-				throw new Error(`HTTP error! Status: ${response.status}`);
-			}
-		return response.json();
-	    }).then(data => {
-		displaySearchResults(data);
-	    })
-	    .catch(error => {
-	        console.error('Error:', error);
-	    });
-	}
+            if(searchTerm=="") {
+                if (document.getElementById('productCardsContainer').innerHTML!=null) {
+                    document.getElementById('productCardsContainer').innerHTML = '';
+                }
+            console.log('Search term is empty. Please enter a valid search term.');
+            document.querySelector('.product-container').classList.remove('displayNone');
+            return;	    
+            }
+            fetch(`/search/${encodeURIComponent(searchTerm)}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+            return response.json();
+            }).then(data => {
+            displaySearchResults(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
 	function displaySearchResults(results) {
 	
 	    console.log('results', results)
