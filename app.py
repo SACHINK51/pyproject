@@ -288,7 +288,7 @@ def filter_method(filter_value):
                 'Price': row[2],
                 'Rating': row[3],
                 'ProductDescription': row[4],
-                'useName': row[6]
+                'userName': row[6]
             }
             products.append(product)
         print('products', products)
@@ -318,7 +318,7 @@ def search_method(search_term):
                 'Price': row[2],
                 'Rating': row[3],
                 'ProductDescription': row[4],
-                'useName': row[6]
+                'userName': row[6]
             }
             products.append(product)
         print('products', products)
