@@ -202,6 +202,7 @@
             return response.json();
             })
             .then(data => {
+                console.log('data',data);
             displaySearchResults(data);
             })
             .catch(error => {
