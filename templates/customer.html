@@ -91,10 +91,15 @@
             border-radius: 5px;
             cursor: pointer;
         }
-
-	.displayNone{
-	    display:none;
-	}
+        #labelForFilterBox{
+            margin-left: 5%;
+        }
+        #filterBox{
+            padding: 6px;
+        }
+        .displayNone{
+            display:none;
+        }
 
     </style>
 </head>
@@ -111,7 +116,7 @@
         <input type="text" id="searchInput" placeholder="Search...">
         <button type="button" onclick="searchMethod()">Search</button>
     </div>
-    <label for="filterBox">Filter : </label>
+    <label id = "labelForFilterBox" for="filterBox">Filter : </label>
     <select id="filterBox" name="userType" onchange=sortMethod(this)>
         <option value="productID">popularity</option>
         <option value="priceLTH">price(Low to High)</option>
