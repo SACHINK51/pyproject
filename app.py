@@ -273,13 +273,13 @@ def filter_method(filter_value):
     if current_user.is_authenticated and current_user.userType == "Customer":
         cursor = mysql.cursor()
         if(filter_value == "priceLTH"):
-            filterQuery='''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID orderBy price'''
+            filterQuery='''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID order By price'''
         elif(filter_value == "priceHTL"):
-            filterQuery='''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID orderBy price DESC'''
+            filterQuery='''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID order By price DESC'''
         elif(filter_value == "ratingLTH"):
-            filterQuery='''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID orderBy rating'''
+            filterQuery='''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID order By rating'''
         elif(filter_value == "ratingHTL"):
-            filterQuery='''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID orderBy rating DESC'''
+            filterQuery='''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID order By rating DESC'''
         else:
             filterQuery='''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID'''
         cursor.execute(filterQuery);
