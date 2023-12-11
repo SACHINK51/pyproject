@@ -23,7 +23,8 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: flex-start; 
-            padding: 20px;
+            padding-left: 20px;
+            padding-right: 20px;
         }
 
         .product-card {
@@ -95,7 +96,7 @@
             margin-left: 5%;
         }
         #filterBox{
-            padding: 6px;
+            padding: 10px 6px 20px;
         }
         .displayNone{
             display:none;
@@ -196,7 +197,7 @@
 	    }
 	    if(results!='') {
             console.log('results are not empty', results)
-            document.querySelector('#productCardsContainer').classList.add('displayNone');
+            document.querySelector('.product-container').classList.add('displayNone');
             if (results && results.length > 0) {
                 results.forEach(product => {
                     console.log(product)
@@ -214,7 +215,7 @@
         } else {
             console.log('results are empty', results)
             document.getElementById('productCardsContainer').textContent = 'No products found.';
-            document.querySelector('#productCardsContainer').classList.add('displayNone');
+            document.querySelector('.product-container').classList.add('displayNone');
 	    }
 	}
     </script>
