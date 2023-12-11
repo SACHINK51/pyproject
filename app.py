@@ -100,10 +100,6 @@ def login():
         cursor = mysql.cursor(); #create a connection to the SQL instance
         cursor.execute(select_query, (userName, userType))
         user = cursor.fetchone()
-        print("Username:", userName)
-        print("password:", password)
-        print("User Type:", userType)
-        print("User:", user)
         if user and bcrypt.check_password_hash(user[3], password):
             # Set user information in the session
             session['userID'] = user[0]
@@ -283,6 +279,20 @@ def filter_method(filter_value):
         else:
             filterQuery='''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID'''
         cursor.execute(filterQuery);
+
+@app.route('/search/<search_term>')
+@login_required
+def search_method(search_term):
+    if current_user.is_authenticated and current_user.userType == "Customer":
+        cursor = mysql.cursor()
+        query = '''
+        SELECT p.*, u.userName
+        FROM Product p
+        JOIN User u ON p.userID = u.userID
+        WHERE p.productName LIKE %s
+            OR p.productDescription LIKE %s
+        '''
+        cursor.execute(query, ('%'+ search_term + '%', '%' + search_term + '%'))
         results = cursor.fetchall()
         products = []
         for row in results :
@@ -299,6 +309,6 @@ def filter_method(filter_value):
         return jsonify(products), 200
     else:
         return 'Access denied. You are not a customer.'
-
+      
 if __name__ == "__main__":
   app.run(host='0.0.0.0',port='8080', ssl_context=('cert.pem', 'privkey.pem')) #Run the flask app at port 8080

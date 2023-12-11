@@ -19,7 +19,7 @@
             text-align: center;
         }
 
-        .product-container {
+        .product-container, #productCardsContainer {
             display: flex;
             flex-wrap: wrap;
             justify-content: flex-start; 
@@ -92,6 +92,10 @@
             cursor: pointer;
         }
 
+	.displayNone{
+	    display:none;
+	}
+
     </style>
 </head>
 <body>
@@ -115,6 +119,7 @@
         <option value="ratingLTH">rating(Low to High)</option>
         <option value="ratingHTL">rating(High to low)</option>
     </select>
+    <div id="productCardsContainer"></div>
     <div class="product-container">
         {% for product in products %}
             <div class="product-card">
@@ -128,20 +133,32 @@
     <script>
         function searchMethod() {
             const searchTerm = document.getElementById('searchInput').value;
-            
-            // Make a request to the Python API for searching
-            fetch(`/search_product?term=${searchTerm}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-            .then(response => {
-                if (response.status === 200) {
-                    window.location.href = `/search_results?term=${searchTerm}`;
+            if(searchTerm=="") {
+                if (document.getElementById('productCardsContainer').innerHTML!=null) {
+                    document.getElementById('productCardsContainer').innerHTML = '';
                 }
+            console.log('Search term is empty. Please enter a valid search term.');
+            document.querySelector('.product-container').classList.remove('displayNone');
+            return;	    
+            }
+            fetch(`/search/${encodeURIComponent(searchTerm)}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+            return response.json();
+            }).then(data => {
+            displaySearchResults(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
             });
         }
+      
         function sortMethod(select){
             const filterValue = document.getElementById('filterBox').value;
             console.log(filterValue);
@@ -165,12 +182,14 @@
                 console.error('Error:', error);
             });
         }
-    function displaySearchResults(results) {
-        console.log('results', results)
-        if (document.getElementById('productCardsContainer').innerHTML!=null) {
-            document.getElementById('productCardsContainer').innerHTML = '';
-        }
-        if(results!='') {
+
+	function displaySearchResults(results) {
+	
+	    console.log('results', results)
+	    if (document.getElementById('productCardsContainer').innerHTML!=null) {
+	    	document.getElementById('productCardsContainer').innerHTML = '';
+	    }
+	    if(results!='') {
             console.log('results are not empty', results)
             document.querySelector('.product-container').classList.add('displayNone');
             if (results && results.length > 0) {
@@ -191,8 +210,8 @@
             console.log('results are empty', results)
             document.getElementById('productCardsContainer').textContent = 'No products found.';
             document.querySelector('.product-container').classList.add('displayNone');
-        }
-    }
+	    }
+	}
     </script>
 </body>
 </html>
