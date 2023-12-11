@@ -165,6 +165,34 @@
                 console.error('Error:', error);
             });
         }
+    function displaySearchResults(results) {
+        console.log('results', results)
+        if (document.getElementById('productCardsContainer').innerHTML!=null) {
+            document.getElementById('productCardsContainer').innerHTML = '';
+        }
+        if(results!='') {
+            console.log('results are not empty', results)
+            document.querySelector('.product-container').classList.add('displayNone');
+            if (results && results.length > 0) {
+                results.forEach(product => {
+                    console.log(product)
+                    var el = `<div class="product-card">
+                        <div class="product-name">${product.ProductName}</div>
+                        <div class="product-price">${product.Price}</div>
+                        <div class="product-description">${product.ProductDescription}</div>
+                        <div class="user-name">Supplier: ${product.userName}</div>
+                    </div>`
+                document.getElementById('productCardsContainer').innerHTML += el;
+                });
+            } else {
+            document.getElementById('productCardsContainer').textContent = 'No products found.';
+            }
+        } else {
+            console.log('results are empty', results)
+            document.getElementById('productCardsContainer').textContent = 'No products found.';
+            document.querySelector('.product-container').classList.add('displayNone');
+        }
+    }
     </script>
 </body>
 </html>
