@@ -19,7 +19,7 @@
             text-align: center;
         }
 
-        .product-container, #productCardsContainer {
+        #productCardsContainer {
             display: flex;
             flex-wrap: wrap;
             justify-content: flex-start; 
@@ -124,17 +124,19 @@
         <option value="ratingLTH">rating(Low to High)</option>
         <option value="ratingHTL">rating(High to low)</option>
     </select>
-    <div id="productCardsContainer"></div>
-    <div class="product-container">
-        {% for product in products %}
-            <div class="product-card">
-                <div class="product-name">{{ product['ProductName'] }}</div>
-                <div class="product-price">${{ product['Price'] }}</div>
-                <div class="product-description">{{ product['ProductDescription'] }}</div>
-                <div class="user-name">Supplier: {{ product['userName'] }}</div>
-            </div>
-        {% endfor %}
+    <div id="productCardsContainer">
+        <div class="product-container">
+            {% for product in products %}
+                <div class="product-card">
+                    <div class="product-name">{{ product['ProductName'] }}</div>
+                    <div class="product-price">${{ product['Price'] }}</div>
+                    <div class="product-description">{{ product['ProductDescription'] }}</div>
+                    <div class="user-name">Supplier: {{ product['userName'] }}</div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
+    
     <script>
         function searchMethod() {
             const searchTerm = document.getElementById('searchInput').value;
