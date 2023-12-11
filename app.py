@@ -140,7 +140,7 @@ def customer_dashboard():
             cur.execute(f'''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID''')
 
         results = cur.fetchall()
-        console.log('results:', results)
+        print('results:', results)
         products = []
 
         for row in results:
