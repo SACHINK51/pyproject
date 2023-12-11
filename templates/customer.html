@@ -153,6 +153,7 @@
 	    	document.getElementById('productCardsContainer').innerHTML = '';
 	    }
 	    if(results!='') {
+            console.log('results are not empty', results)
             document.querySelector('.product-container').classList.add('displayNone');
             if (results && results.length > 0) {
                 results.forEach(product => {
