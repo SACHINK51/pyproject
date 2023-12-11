@@ -127,12 +127,11 @@
         <button type="button" onclick="searchMethod()">Search</button>
     </div>
    <div class="custom-dropdown">
-    <ul id="dropdownList">
-        <li onclick="sortMethod('price')">Price (Low to High)</li>
-        <li onclick="sortMethod('productName')">Product Name (A to Z)</li>
-    </ul>
-</div>
-</div>
+        <ul id="dropdownList">
+            <li onclick="sortMethod('price')">Price (Low to High)</li>
+            <li onclick="sortMethod('productName')">Product Name (A to Z)</li>
+        </ul>
+    </div>
     <div class="product-container">
         {% for product in products %}
             <div class="product-card">
