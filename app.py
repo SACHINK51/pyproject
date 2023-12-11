@@ -267,6 +267,38 @@ def delete_product(product_id):
         except Exception as e:
             return jsonify({'error': str(e)}), 500
 
-          
+@app.route('/filter/<filter_value>')
+@login_required
+def filter_method(filter_value):
+    if current_user.is_authenticated and current_user.userType == "Customer":
+        cursor = mysql.cursor()
+        if(filter_value == "priceLTH"):
+            filterQuery='''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID orderBy price'''
+        elif(filter_value == "priceHTL"):
+            filterQuery='''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID orderBy price DESC'''
+            elif(filter_value == "ratingLTH"):
+            filterQuery='''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID orderBy rating'''
+            elif(filter_value == "ratingHTL"):
+            filterQuery='''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID orderBy rating DESC'''
+            else:
+            filterQuery='''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID'''
+        cur.execute(filterQuery);
+        results = cursor.fetchall()
+        products = []
+        for row in results :
+            product = {
+                'productID': row[0],
+                'ProductName': row[1],
+                'Price': row[2],
+                'Rating': row[3],
+                'ProductDescription': row[4],
+                'useName': row[6]
+            }
+            products.append(product)
+        print('products', products)
+        return jsonify(products), 200
+    else:
+        return 'Access denied. You are not a customer.'
+
 if __name__ == "__main__":
   app.run(host='0.0.0.0',port='8080', ssl_context=('cert.pem', 'privkey.pem')) #Run the flask app at port 8080

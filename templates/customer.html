@@ -110,8 +110,10 @@
     <label for="filterBox">Filter : </label>
     <select id="filterBox" name="userType" onchange=sortMethod(this)>
         <option value="productID">popularity</option>
-        <option value="price">price</option>
-        <option value="rating">rating</option>
+        <option value="priceLTH">price(Low to High)</option>
+        <option value="priceHTL">price(High to Low)</option>
+        <option value="ratingLTH">rating(Low to High)</option>
+        <option value="ratingHTL">rating(High to low)</option>
     </select>
     <div class="product-container">
         {% for product in products %}
@@ -141,7 +143,27 @@
             });
         }
         function sortMethod(select){
-            console.log(select.options[select.selectedIndex].getValue());
+            const filterValue = document.getElementById('filterBox').value;
+            console.log(filterValue);
+
+            fetch(`/filter/${encodeURIComponent(filterValue)}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+            return response.json();
+            })
+            .then(data => {
+            displaySearchResults(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
         }
     </script>
 </body>
