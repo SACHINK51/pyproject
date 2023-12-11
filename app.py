@@ -279,7 +279,23 @@ def filter_method(filter_value):
         else:
             filterQuery='''SELECT p.*, u.userName FROM Product p JOIN User u ON p.userID = u.userID'''
         cursor.execute(filterQuery);
-
+        results = cursor.fetchall()
+        products = []
+        for row in results :
+            product = {
+                'productID': row[0],
+                'ProductName': row[1],
+                'Price': row[2],
+                'Rating': row[3],
+                'ProductDescription': row[4],
+                'useName': row[6]
+            }
+            products.append(product)
+        print('products', products)
+        return jsonify(products), 200
+    else:
+        return 'Access denied. You are not a customer.'
+    
 @app.route('/search/<search_term>')
 @login_required
 def search_method(search_term):
