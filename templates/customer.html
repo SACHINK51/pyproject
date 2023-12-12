@@ -96,6 +96,23 @@
 	    display:none;
 	}
 
+	.Stars {
+	  --percent: calc(var(--rating) / 5 * 100%);
+	  display: inline-block;
+	  font-size: 30px;
+	  font-family: 'Times New Roman', sans-serif;
+	  line-height: 1;
+	  background-color: #eae8e8;
+	}
+	
+	.Stars::before {
+	  content: '★★★★★';
+	  letter-spacing: 3px;
+	  background: linear-gradient(90deg, #fc0 var(--percent), #fff var(--percent));
+	  -webkit-background-clip: text;
+	  -webkit-text-fill-color: transparent;
+	}
+
     </style>
 </head>
 <body>
@@ -121,14 +138,16 @@
     </select>
     <div id="productCardsContainer"></div>
     <div class="product-container">
-        {% for product in products %}
-            <div class="product-card">
-                <div class="product-name">{{ product['ProductName'] }}</div>
-                <div class="product-price">${{ product['Price'] }}</div>
-                <div class="product-description">{{ product['ProductDescription'] }}</div>
-                <div class="user-name">Supplier: {{ product['userName'] }}</div>
-            </div>
-        {% endfor %}
+       {% for product in products %}
+    <div class="product-card">
+                        <div class="product-name">${product.ProductName}</div>
+                        <div class="product-price">${product.Price}</div>
+                        <div class="product-description">${product.ProductDescription}</div>
+			<div class="Stars" style="--rating:${product.ProductRatings};" aria-label="Rating of this product is'+product.ratings+' out of 5."></div>
+			<h3 class="review">${product.ProductRatings} out of 5</h3>'+
+                        <div class="user-name">Supplier: ${product.userName}</div>
+    </div>
+{% endfor %}
     </div>
     <script>
         function searchMethod() {
@@ -199,6 +218,8 @@
                         <div class="product-name">${product.ProductName}</div>
                         <div class="product-price">${product.Price}</div>
                         <div class="product-description">${product.ProductDescription}</div>
+			<div class="Stars" style="--rating:${product.ProductRatings};" aria-label="Rating of this product is'+product.ratings+' out of 5."></div>
+			<h3 class="review">${product.ProductRatings} out of 5</h3>'+
                         <div class="user-name">Supplier: ${product.userName}</div>
                     </div>`
                 document.getElementById('productCardsContainer').innerHTML += el;
