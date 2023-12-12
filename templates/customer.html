@@ -172,7 +172,7 @@
 	        </div>
 	        <div class="product-price">${{ product['Price'] }}</div>
 	        <div class="product-description">{{ product['ProductDescription'] }}</div>
-	        <div class="Stars" style="--rating: {{ product['Rating'] }};" aria-label="Rating of this product is {{ product['Rating'] }} out of 5."></div>
+            <div><span>{{ product['Rating'] }}</span><div class="Stars" style="--rating: {{ product['Rating'] }};" aria-label="Rating of this product is {{ product['Rating'] }} out of 5."></div></div>
 	        <div class="user-name">Supplier: {{ product['userName'] }}</div>
 	    </div>
 	{% endfor %}
