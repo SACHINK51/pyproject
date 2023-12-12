@@ -119,27 +119,6 @@
         .displayNone{
             display:none;
         }
-        .rating-span{
-            padding: 10px;
-        }
-
-	.Stars {
-	  --percent: calc(var(--rating) / 5 * 100%);
-	  display: inline-block;
-	  font-size: 30px;
-	  font-family: 'Times New Roman', sans-serif;
-	  line-height: 1;
-	  background-color: #eae8e8;
-	}
-	
-	.Stars::before {
-	  content: '★★★★★';
-	  letter-spacing: 3px;
-	  background: linear-gradient(90deg, #fc0 var(--percent), #fff var(--percent));
-	  -webkit-background-clip: text;
-	  -webkit-text-fill-color: transparent;
-	}
-
     </style>
 </head>
 <body>
@@ -175,7 +154,6 @@
 	        </div>
 	        <div class="product-price">${{ product['Price'] }}</div>
 	        <div class="product-description">{{ product['ProductDescription'] }}</div>
-            <div><span class="rating-span">{{ product['Rating'] }}</span><div class="Stars" style="--rating: {{ product['Rating'] }};" aria-label="Rating of this product is {{ product['Rating'] }} out of 5."></div></div>
 	        <div class="user-name">Supplier: {{ product['userName'] }}</div>
 	    </div>
 	{% endfor %}
