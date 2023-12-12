@@ -119,6 +119,9 @@
         .displayNone{
             display:none;
         }
+        .rating-span{
+            padding: 10px;
+        }
 
 	.Stars {
 	  --percent: calc(var(--rating) / 5 * 100%);
@@ -172,7 +175,7 @@
 	        </div>
 	        <div class="product-price">${{ product['Price'] }}</div>
 	        <div class="product-description">{{ product['ProductDescription'] }}</div>
-            <div><span>{{ product['Rating'] }}</span><div class="Stars" style="--rating: {{ product['Rating'] }};" aria-label="Rating of this product is {{ product['Rating'] }} out of 5."></div></div>
+            <div><span class="rating-span">{{ product['Rating'] }}</span><div class="Stars" style="--rating: {{ product['Rating'] }};" aria-label="Rating of this product is {{ product['Rating'] }} out of 5."></div></div>
 	        <div class="user-name">Supplier: {{ product['userName'] }}</div>
 	    </div>
 	{% endfor %}
