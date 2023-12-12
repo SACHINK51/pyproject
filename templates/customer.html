@@ -165,14 +165,18 @@
     <div id="productCardsContainer"></div>
     <div class="product-container">
         {% for product in products %}
-            <div class="product-card">
-                <div class="product-name"><span class="product-name-span">{{ product['ProductName'] }}</span> <span class="product-rating">{{ product['Rating'] }} ★</span></div>
-                <div class="product-price">${{ product['Price'] }}</div>
-                <div class="product-description">{{ product['ProductDescription'] }}</div>
-		<div class="Stars" style="--rating:${{ product['Rating']}};" aria-label="Rating of this product is +'{{ product['Rating'] }}'+ out of 5."></div>
-                <div class="user-name">Supplier: {{ product['userName'] }}</div>
-            </div>
-        {% endfor %}
+	    <div class="product-card">
+	        <div class="product-name">
+	            <span class="product-name-span">{{ product['ProductName'] }}</span>
+	            <span class="product-rating">{{ product['Rating'] }} ★</span>
+	        </div>
+	        <div class="product-price">${{ product['Price'] }}</div>
+	        <div class="product-description">{{ product['ProductDescription'] }}</div>
+	        <div class="Stars" style="--rating: {{ product['Rating'] }};" aria-label="Rating of this product is {{ product['Rating'] }} out of 5."></div>
+	        <div class="user-name">Supplier: {{ product['userName'] }}</div>
+	    </div>
+	{% endfor %}
+
     </div>
     <script>
         function searchMethod() {
