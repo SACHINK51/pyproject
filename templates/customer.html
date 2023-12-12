@@ -119,21 +119,23 @@
         .displayNone{
             display:none;
         }
-	.Stars {
-  display: inline-block;
-  font-size: 30px;
-  color: #fc0; /* Color of filled stars */
-}
 
-.Stars::before {
-  content: "\f005\f005\f005\f005\f005"; /* Unicode characters for 5 filled stars */
-  font-family: 'Font Awesome';
-  letter-spacing: 3px; /* Adjust the spacing between stars */
-  background: linear-gradient(90deg, #fc0 var(--percent), #fff var(--percent));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-s
+	.Stars {
+	  --percent: calc(var(--rating) / 5 * 100%);
+	  display: inline-block;
+	  font-size: 30px;
+	  font-family: 'Times New Roman', sans-serif;
+	  line-height: 1;
+	  background-color: #eae8e8;
+	}
+	
+	.Stars::before {
+	  content: '★★★★★';
+	  letter-spacing: 3px;
+	  background: linear-gradient(90deg, #fc0 var(--percent), #fff var(--percent));
+	  -webkit-background-clip: text;
+	  -webkit-text-fill-color: transparent;
+	}
 
     </style>
 </head>
