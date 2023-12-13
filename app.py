@@ -114,7 +114,6 @@ def customer_dashboard():
                 'userName': row[6]
             }
             products.append(product)
-        print('products', products)
         return render_template('customer.html', products=products)
     else:
         return 'Access denied. You are not a customer.'
@@ -137,7 +136,6 @@ def supplier_dashboard():
                 'userID': row[5]
             }
             products.append(product)
-        print('products', products)
         return render_template('supplier.html', products=products)
     else:
         return 'Access denied. You are not a Supplier.'
@@ -194,16 +192,12 @@ def add_product():
 def update_product(product_id):
     if current_user.userType == "Supplier":
         try:
-            print('request.method = ',request.method)
             if request.method == 'PUT':
                 data = request.get_json()
-                print(data)
                 productName = data.get('new_product_name')
                 price = data.get('new_price')
                 rating = data.get('new_rating')
                 productDescription = data.get('new_product_description')
-                print('product_id = ',product_id)
-                print('sessionID = ', session.get('userID'))
                 userID = session.get('userID')
                 productID = product_id
 
@@ -213,10 +207,8 @@ def update_product(product_id):
                     SET productName = %s, price = %s, rating = %s, productDescription = %s
                     WHERE productID = %s;
                 '''
-                print('update_query',update_query)
                 cursor = mysql.cursor()
                 resp = cursor.execute(update_query, (productName, price, rating, productDescription, productID))
-                print(resp)
                 mysql.commit()
 
                 return jsonify({'message': 'Product updated successfully'}), 200
@@ -270,7 +262,6 @@ def filter_method(filter_value):
                 'userName': row[6]
             }
             products.append(product)
-        print('products', products)
         return jsonify(products), 200
     else:
         return 'Access denied. You are not a customer.'
@@ -300,7 +291,6 @@ def search_method(search_term):
                 'userName': row[6]
             }
             products.append(product)
-        print('products', products)
         return jsonify(products), 200
     else:
         return 'Access denied. You are not a customer.'
