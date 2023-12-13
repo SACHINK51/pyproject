@@ -5,7 +5,6 @@ import mysql.connector
 from flask_cors import CORS
 import json
 from werkzeug.security import generate_password_hash, check_password_hash
-import mysql.connector
 
 mysql = mysql.connector.connect(user='web', password='webPass',
   host='127.0.0.1',
