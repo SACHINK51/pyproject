@@ -1,3 +1,4 @@
+# Import necessary modules
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, login_required, UserMixin, login_user, logout_user, current_user
@@ -5,10 +6,12 @@ import mysql.connector
 from flask_cors import CORS
 import json
 
+# MySQL database connection
 mysql = mysql.connector.connect(user='web', password='webPass',
   host='127.0.0.1',
   database='SupplyChainManager')
 
+# Flask app initialization
 app = Flask(__name__)
 app.secret_key = 'supply_chain_secret_key'
 CORS(app)
@@ -16,12 +19,14 @@ bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
+# User class for Flask-Login
 class User(UserMixin):
     def __init__(self, userID, userName, userType):
         self.id = userID
         self.userName = userName
         self.userType = userType
 
+# Loader function for Flask-Login
 @login_manager.user_loader
 def load_user(userID):
     user = query_user_by_id(userID)
@@ -30,6 +35,7 @@ def load_user(userID):
     else:
         return None
 
+# Database query function to get user by ID
 def query_user_by_id(userID):
     # Replace this with your actual database query
     select_query = 'SELECT * FROM User WHERE userID = %s'
@@ -41,7 +47,8 @@ def query_user_by_id(userID):
         return User(user[0], user[1], user[2])
     else:
         return None
-    
+
+# Route for user signup    
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     signup_alert = None
@@ -66,7 +73,8 @@ def signup():
         return render_template('signup.html', signup_alert=signup_alert)
 
     return render_template('signup.html')
-	
+
+# Route for user login	
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -96,6 +104,7 @@ def login():
 
     return render_template('login.html')
 
+# Route for customer dashboard
 @app.route("/customer_dashboard")
 @login_required
 def customer_dashboard():
@@ -117,7 +126,8 @@ def customer_dashboard():
         return render_template('customer.html', products=products)
     else:
         return 'Access denied. You are not a customer.'
-     
+
+# Route for supplier dashboard     
 @app.route("/supplier_dashboard")
 @login_required
 def supplier_dashboard():
@@ -140,7 +150,7 @@ def supplier_dashboard():
     else:
         return 'Access denied. You are not a Supplier.'
 
-
+# Route for user logout
 @app.route('/logout', methods=['POST'])
 def logout():
     logout_user()
@@ -150,6 +160,7 @@ def logout():
     session.pop('userType', None)
     return redirect(url_for('login'))
 
+# Default route
 @app.route("/") 
 def defaultPage():
     if current_user.is_authenticated:
@@ -160,7 +171,7 @@ def defaultPage():
     else:
         return redirect(url_for('login'))
     
-
+# Route for adding a new product
 @app.route('/add_product', methods=['GET','POST'])
 @login_required
 def add_product():
@@ -186,7 +197,7 @@ def add_product():
         except Exception as e:
             return jsonify({'error': str(e)}), 500
 
-
+# Route for updating a product
 @app.route('/update_product/<int:product_id>', methods=['GET','PUT'])
 @login_required
 def update_product(product_id):
@@ -216,6 +227,7 @@ def update_product(product_id):
         except Exception as e:
             return jsonify({'error': str(e)}), 500
 
+# Route for deleting a product
 @app.route('/delete_product/<int:product_id>', methods=['GET','DELETE'])
 @login_required
 def delete_product(product_id):
@@ -234,6 +246,7 @@ def delete_product(product_id):
         except Exception as e:
             return jsonify({'error': str(e)}), 500
 
+# Route for filtering a product
 @app.route('/filter/<filter_value>')
 @login_required
 def filter_method(filter_value):
@@ -265,7 +278,8 @@ def filter_method(filter_value):
         return jsonify(products), 200
     else:
         return 'Access denied. You are not a customer.'
-    
+
+# Route for searching a product    
 @app.route('/search/<search_term>')
 @login_required
 def search_method(search_term):
