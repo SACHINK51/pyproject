@@ -37,7 +37,6 @@ def load_user(userID):
 
 # Database query function to get user by ID
 def query_user_by_id(userID):
-    # Replace this with your actual database query
     select_query = 'SELECT * FROM User WHERE userID = %s'
     cursor = mysql.cursor()
     cursor.execute(select_query, (userID,))
