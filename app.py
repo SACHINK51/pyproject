@@ -4,7 +4,6 @@ from flask_login import LoginManager, login_required, UserMixin, login_user, log
 import mysql.connector
 from flask_cors import CORS
 import json
-from werkzeug.security import generate_password_hash, check_password_hash
 
 mysql = mysql.connector.connect(user='web', password='webPass',
   host='127.0.0.1',
